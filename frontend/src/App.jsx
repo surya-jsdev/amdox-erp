@@ -1,8 +1,9 @@
 import React from 'react'
+import Login from './pages/Auth/Login'
 
 function App() {
   return (
-    <div className='m-5 p-3 bg-amber-300 inline'>App</div>
+    <Login/>
   )
 }
 
