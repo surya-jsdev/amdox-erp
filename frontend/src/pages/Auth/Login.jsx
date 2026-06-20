@@ -27,7 +27,7 @@ function Login() {
     <>
       <section className='h-dvh flex justify-center items-center'>
         <div className='w-auto rounded-2xl  flex h-175 shadow-xl/20'>
-          <div className='w-[350px] rounded-tl-2xl rounded-bl-2xl' style={{ backgroundImage: `url(${loginBg})`, backgroundSize: 'cover' }}>
+          <div className='w-87 rounded-tl-2xl rounded-bl-2xl' style={{ backgroundImage: `url(${loginBg})`, backgroundSize: 'cover' }}>
             {/* <h2 className='text-white'>AMDOX<span className='text-blue-800'>ERP</span></h2> */}
           </div>
           <div className='flex p-4 flex-col  w-sm h-vh'>
@@ -73,7 +73,7 @@ function Login() {
               <p className='text-center'>OR</p>
             </div>
             <div className='text-center mt-6'>
-              Don't have an account? <Link to='/register' className='text-blue-900 font-bold'>Register now</Link>
+              Don't have an account? <Link to='/registration' className='text-blue-700'>Register now</Link>
             </div>
           </div>
         </div>
