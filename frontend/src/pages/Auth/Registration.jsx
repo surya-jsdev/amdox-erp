@@ -5,6 +5,22 @@ import { Mail, Lock, User, Contact, Building2, Contact2, LockKeyhole } from "luc
 import registerBg from '../../assets/register.png';
 
 function Registration() {
+
+    const [RegisterData, setRegisterData] = useState({
+        name: '',
+        email: '',
+        companyname: '',
+        password: '',
+        confirmpassword: '',
+        error: ''
+    });
+    const handlingregisterdata = (e) => {
+        setRegisterData({
+            ...RegisterData,
+            [e.target.name]: e.target.value,
+            error: ''
+        })
+    }
     return (
         <>
             <section className='h-dvh flex justify-center items-center'>
@@ -24,8 +40,10 @@ function Registration() {
                                     <div className="flex items-center border border-gray-400 rounded-lg px-3">
                                         <Contact2 size={16} className="text-gray-500" />
                                         <input
-                                            type="email"
-                                            name="email"
+                                            type="name"
+                                            name="name"
+                                            value={RegisterData.name}
+                                            onChange={handlingregisterdata}
                                             placeholder="Enter your full name"
                                             className="p-2 outline-none w-full"
                                             autoComplete='off'
@@ -33,12 +51,14 @@ function Registration() {
                                     </div>
                                 </div>
                                 <div className='flex flex-col'>
-                                    <label htmlFor="password" className='font-bold p-1 mt-2 text-sm'>Password</label>
+                                    <label htmlFor="password" className='font-bold p-1 mt-2 text-sm'>Email Address</label>
                                     <div className='flex items-center border border-gray-400 rounded-lg px-3'>
-                                        <Lock size={16} className="text-gray-500" />
+                                        <Mail size={16} className="text-gray-500" />
                                         <input
                                             type="email"
                                             name="email"
+                                            value={RegisterData.email}
+                                            onChange={handlingregisterdata}
                                             placeholder='Enter your email address'
                                             className='p-2 outline-none w-full'
                                             autoComplete='off'
@@ -52,7 +72,9 @@ function Registration() {
                                         <input
                                             type="email"
                                             name="email"
-                                            placeholder='Enter your email address'
+                                            value={RegisterData.companyname}
+                                            onChange={handlingregisterdata}
+                                            placeholder='Enter your company name'
                                             className='p-2 outline-none w-full'
                                             autoComplete='off'
                                         />
@@ -65,6 +87,8 @@ function Registration() {
                                         <input
                                             type="password"
                                             name="password"
+                                            value={RegisterData.password}
+                                            onChange={handlingregisterdata}
                                             placeholder='Create a password'
                                             className='p-2 outline-none w-full'
                                             autoComplete='off'
@@ -78,6 +102,8 @@ function Registration() {
                                         <input
                                             type="password"
                                             name="password"
+                                            value={RegisterData.confirmpassword}
+                                            onChange={handlingregisterdata}
                                             placeholder='Confirm your password'
                                             className='p-2 outline-none w-full'
                                             autoComplete='off'
@@ -89,7 +115,7 @@ function Registration() {
                             </form>
                         </div>
                         <div className='text-center mt-6'>
-                            Already have an account ?<Link to='/Login' className='text-blue-700'>Login now</Link>
+                            Already have an account ?<Link to='/Login' className='text-blue-700'> Login now</Link>
                         </div>
                     </div>
                 </div>
