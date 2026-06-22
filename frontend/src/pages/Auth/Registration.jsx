@@ -1,8 +1,9 @@
 import React from 'react'
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link} from 'react-router-dom'
 import { Mail, Lock, User, Contact, Building2, Contact2, LockKeyhole } from "lucide-react"
 import registerBg from '../../assets/register.png';
+
 
 function Registration() {
 
@@ -11,7 +12,6 @@ function Registration() {
         email: '',
         companyname: '',
         password: '',
-        confirmpassword: '',
         error: ''
     });
     const handlingregisterdata = (e) => {
@@ -21,6 +21,39 @@ function Registration() {
             error: ''
         })
     }
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        const { name, email, companyname, password } = RegisterData;
+
+        try {
+            const response = await fetch(
+                "http://localhost:5000/api/auth/register",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ name, email, companyname, password }),
+                }
+            );
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message || 'Registration failed');
+            }
+
+            console.log(data);
+            alert(data.message);
+            setRegisterData({ name: '', email: '', companyname: '', password: '', error: '' });
+          
+        } catch (error) {
+            console.error(error);
+            alert(error.message || 'Registration error');
+        }
+    };
     return (
         <>
             <section className='h-dvh flex justify-center items-center'>
@@ -34,13 +67,13 @@ function Registration() {
                                 <Contact size={22} className='ml-2' />
                                 <p className='text-center text-gray-400'>Fill the details below to get started</p>
                             </div>
-                            <form className='mt-2 p-2'>
+                            <form onSubmit={handleSubmit} className='mt-2 p-2'>
                                 <div className='flex flex-col'>
-                                    <label htmlFor="text" className='font-bold p-1 mt-2 text-sm'>Full Name</label>
+                                    <label htmlFor="name" className='font-bold p-1 mt-2 text-sm'>Full Name</label>
                                     <div className="flex items-center border border-gray-400 rounded-lg px-3">
                                         <Contact2 size={16} className="text-gray-500" />
                                         <input
-                                            type="name"
+                                            type="text"
                                             name="name"
                                             value={RegisterData.name}
                                             onChange={handlingregisterdata}
@@ -70,8 +103,8 @@ function Registration() {
                                     <div className='flex items-center border border-gray-400 rounded-lg px-3'>
                                         <Building2 size={16} className="text-gray-500" />
                                         <input
-                                            type="email"
-                                            name="email"
+                                            type="text"
+                                            name="companyname"
                                             value={RegisterData.companyname}
                                             onChange={handlingregisterdata}
                                             placeholder='Enter your company name'
@@ -95,7 +128,7 @@ function Registration() {
                                         />
                                     </div>
                                 </div>
-                                <div className='flex flex-col'>
+                                {/* <div className='flex flex-col'>
                                     <label htmlFor="text" className='font-bold p-1 mt-2 text-sm'>Confirm Password</label>
                                     <div className='flex items-center border border-gray-400 rounded-lg px-3'>
                                         <LockKeyhole size={16} className="text-gray-500" />
@@ -109,7 +142,7 @@ function Registration() {
                                             autoComplete='off'
                                         />
                                     </div>
-                                </div>
+                                </div> */}
                                 {/* {formData.error && <p className='text-red-500 text-sm mt-3'>{formData.error}</p>} */}
                                 <button type='submit' className='bg-blue-800 text-white text-sm w-xs mt-5 p-2 rounded-xl cursor-pointer'>Create Account</button>
                             </form>

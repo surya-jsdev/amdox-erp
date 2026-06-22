@@ -1,12 +1,14 @@
 import React from 'react';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock } from "lucide-react";
 import loginBg from '../../assets/login_bg.png';
 
 function Login() {
 
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
+
     email: '',
     password: '',
     error: ''
@@ -21,6 +23,45 @@ function Login() {
 
   const handleLoginForm = async (e) => {
     e.preventDefault();
+
+    const { email, password } = formData;
+
+    if (!email || !password) {
+      setFormData({ ...formData, error: 'Email and password are required' });
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        "http://localhost:5000/api/auth/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, password }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setFormData({ ...formData, error: data.message });
+        return;
+      }
+
+      console.log('Login successful:', data);
+      alert(data.message);
+      // Store user data (optional - you can use context or localStorage)
+      localStorage.setItem('user', JSON.stringify(data.user));
+      // Clear form
+      setFormData({ email: '', password: '', error: '' });
+      // Redirect to dashboard
+      navigate('/Dashboard');
+    } catch (error) {
+      console.error(error);
+      setFormData({ ...formData, error: error.message || 'Login failed' });
+    }
   }
 
   return (
