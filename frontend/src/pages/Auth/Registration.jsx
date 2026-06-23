@@ -1,11 +1,12 @@
 import React from 'react'
 import { useState } from 'react'
-import { Link} from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Mail, Lock, User, Contact, Building2, Contact2, LockKeyhole } from "lucide-react"
 import registerBg from '../../assets/register.png';
 
 
 function Registration() {
+    const navigate = useNavigate();
 
     const [RegisterData, setRegisterData] = useState({
         name: '',
@@ -14,6 +15,7 @@ function Registration() {
         password: '',
         error: ''
     });
+    const [successMessage, setSuccessMessage] = useState('');
     const handlingregisterdata = (e) => {
         setRegisterData({
             ...RegisterData,
@@ -44,11 +46,10 @@ function Registration() {
             if (!response.ok) {
                 throw new Error(data.message || 'Registration failed');
             }
-
             console.log(data);
-            alert(data.message);
+            setSuccessMessage(data.message);
             setRegisterData({ name: '', email: '', companyname: '', password: '', error: '' });
-          
+
         } catch (error) {
             console.error(error);
             alert(error.message || 'Registration error');
@@ -61,7 +62,7 @@ function Registration() {
                     <div className='w-87 rounded-tl-2xl rounded-bl-2xl' style={{ backgroundImage: `url(${registerBg})`, backgroundSize: 'cover' }}>
                     </div>
                     <div className='flex p-4 flex-col  w-sm h-vh'>
-                        <div className='mt-10 '>
+                        <div className='flex flex-wrap justify-center mt-15'>
                             <div className='flex flex-wrap justify-center'>
                                 <h1 className='font-bold text-center'>Create Account</h1>
                                 <Contact size={22} className='ml-2' />
@@ -144,7 +145,9 @@ function Registration() {
                                     </div>
                                 </div> */}
                                 {/* {formData.error && <p className='text-red-500 text-sm mt-3'>{formData.error}</p>} */}
+
                                 <button type='submit' className='bg-blue-800 text-white text-sm w-xs mt-5 p-2 rounded-xl cursor-pointer'>Create Account</button>
+                                {successMessage && <div className='bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mt-4 text-center'>{successMessage}</div>}
                             </form>
                         </div>
                         <div className='text-center mt-6'>
