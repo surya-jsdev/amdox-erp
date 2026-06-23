@@ -31,7 +31,7 @@ function Registration() {
 
         try {
             const response = await fetch(
-                "http://localhost:5000/api/auth/register",
+                "https://amdoxerp.vercel.app/api/auth/register",
                 {
                     method: "POST",
                     headers: {
