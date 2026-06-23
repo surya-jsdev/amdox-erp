@@ -5,6 +5,10 @@ body {
   font-family: 'Poppins', sans-serif;
 }
 
-input::placeholder{
-    font-size: 14px;
+input::placeholder {
+  font-size: 14px;
+}
+
+:root {
+  --sidebar-text: white;
 }
