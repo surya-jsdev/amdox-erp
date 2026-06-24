@@ -108,7 +108,7 @@ function Login() {
                 </div>
               </div>
               {/* {formData.error && <p className='text-red-500 text-sm mt-3'>{formData.error}</p>} */}
-              <button type='submit' className='bg-blue-800 text-white w-xs mt-5 p-2 rounded-xl cursor-pointer'>Sign In</button>
+              <button type='submit' className='bg-blue-800 text-white w-xs mt-5 p-2 rounded-xl cursor-pointer'>Login</button>
             </form>
             <div className=' mt-10'>
               <p className='text-center'>OR</p>

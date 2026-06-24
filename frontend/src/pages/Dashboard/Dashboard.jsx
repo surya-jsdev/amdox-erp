@@ -66,7 +66,7 @@ function Dashboard() {
 
         <div className="p-4 ml-5">
           <h1 className="text-xl text-white font-bold">
-            Amdox <span className='text-blue-600'>ERP</span>
+            AmDOX <span className='text-blue-600'> ERP</span>
           </h1>
         </div>
 
