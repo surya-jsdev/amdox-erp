@@ -33,7 +33,7 @@ function Login() {
 
     try {
       const response = await fetch(
-        "https://amdox-erp-h4zm.onrender.com/api/auth/login",
+        "http://localhost:5000/api/auth/login",
         {
           method: "POST",
           headers: {

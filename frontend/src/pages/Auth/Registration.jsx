@@ -31,7 +31,7 @@ function Registration() {
 
         try {
             const response = await fetch(
-                "https://amdox-erp-h4zm.onrender.com/api/auth/register",
+                "http://localhost:5000/api/auth/register",
                 {
                     method: "POST",
                     headers: {
