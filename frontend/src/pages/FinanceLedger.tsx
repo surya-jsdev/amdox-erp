@@ -70,7 +70,7 @@ function FinanceLedger() {
             setLoading(false);
         }
     };
-
+    
     useEffect(() => {
         const storedUser = localStorage.getItem('user');
         if (storedUser) {
