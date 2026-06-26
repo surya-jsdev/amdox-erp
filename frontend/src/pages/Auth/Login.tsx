@@ -4,16 +4,24 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock } from "lucide-react";
 import loginBg from '../../assets/login_bg.png';
 
+
+interface FormData {
+  email: string;
+  password: string;
+  error: string;
+}
 function Login() {
 
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
 
+
+  const [formData, setFormData] = useState<FormData>({
     email: '',
     password: '',
     error: ''
   });
-  const handlingdata = (e) => {
+  // HandalingLogin Input
+  const handlingdata = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
@@ -21,7 +29,7 @@ function Login() {
     })
   }
 
-  const handleLoginForm = async (e) => {
+  const handleLoginForm = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
 
     const { email, password } = formData;
@@ -39,7 +47,7 @@ function Login() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ email, password }),
+          body: JSON.stringify({ email: formData.email, password: formData.password }),
         }
       );
 
@@ -60,7 +68,7 @@ function Login() {
       navigate('/Dashboard');
     } catch (error) {
       console.error(error);
-      setFormData({ ...formData, error: error.message || 'Login failed' });
+      setFormData({ ...formData, error: error instanceof Error ? error.message : 'Login failed', });
     }
   }
 

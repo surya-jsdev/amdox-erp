@@ -38,12 +38,11 @@ function Aside() {
 
             <div className="p-4 ml-4">
                 <h1 className="text-xl text-white font-bold">
-                    AmDOX <span className='text-blue-600'> ERP</span>
+                    AmDOX <span className='text-blue-800'> ERP</span>
                 </h1>
             </div>
 
             <div className="mt-5 px-3">
-
                 {menuItems.map((item, index) => {
                     const Icon = item.icon;
 

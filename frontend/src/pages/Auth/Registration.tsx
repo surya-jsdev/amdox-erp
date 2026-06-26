@@ -4,11 +4,18 @@ import { Link, useNavigate } from 'react-router-dom'
 import { Mail, Lock, User, Contact, Building2, Contact2, LockKeyhole } from "lucide-react"
 import registerBg from '../../assets/register.png';
 
+interface RegisterData {
+    name: string;
+    email: string;
+    companyname: string;
+    password: string;
+    error: string;
+}
 
 function Registration() {
     const navigate = useNavigate();
 
-    const [RegisterData, setRegisterData] = useState({
+    const [RegisterData, setRegisterData] = useState<RegisterData>({
         name: '',
         email: '',
         companyname: '',
@@ -16,7 +23,7 @@ function Registration() {
         error: ''
     });
     const [successMessage, setSuccessMessage] = useState('');
-    const handlingregisterdata = (e) => {
+    const handlingregisterdata = (e: React.ChangeEvent<HTMLInputElement>) => {
         setRegisterData({
             ...RegisterData,
             [e.target.name]: e.target.value,
@@ -24,7 +31,7 @@ function Registration() {
         })
     }
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
         e.preventDefault();
 
         const { name, email, companyname, password } = RegisterData;
@@ -52,7 +59,7 @@ function Registration() {
 
         } catch (error) {
             console.error(error);
-            alert(error.message || 'Registration error');
+            alert(error instanceof Error ? error.message  :'Registration error');
         }
     };
     return (
