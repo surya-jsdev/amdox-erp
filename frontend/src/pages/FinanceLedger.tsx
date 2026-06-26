@@ -29,7 +29,7 @@ const emptyForm: LedgerFormState = {
     amount: '',
     balance: ''
 };
-
+// Finance Ledger
 function FinanceLedger() {
     const [entries, setEntries] = useState<LedgerEntry[]>([]);
     const [loading, setLoading] = useState(true);
@@ -70,7 +70,7 @@ function FinanceLedger() {
             setLoading(false);
         }
     };
-    
+
     useEffect(() => {
         const storedUser = localStorage.getItem('user');
         if (storedUser) {
