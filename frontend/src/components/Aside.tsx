@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import {
     HomeIcon, DollarSign, User, Building2Icon, Folder, LucideTimer, Package,
@@ -16,9 +16,9 @@ import {
     ArrowBigRightIcon, Search
 } from 'lucide-react'
 
-const menuItems = [
+const baseMenuItems = [
     { name: 'Dashboard', path: '/', icon: HomeIcon },
-    { name: 'Finace', path: '/sales', icon: DollarSign },
+    { name: 'Finance Ledger', path: '/finance-ledger', icon: DollarSign },
     { name: 'HR & Payroll', path: '/customers', icon: User },
     { name: 'Supply Chain', path: '/vendors', icon: Building2Icon },
     { name: 'Inventory', path: '/inventory', icon: Boxes },
@@ -31,7 +31,24 @@ const menuItems = [
     { name: 'Logout', path: '/logout', icon: LogOut }
 ]
 
+const adminMenuItem = { name: 'Admin', path: '/admin/users', icon: UserCog }
+
 function Aside() {
+    const [userRole, setUserRole] = useState('');
+
+    useEffect(() => {
+        const storedUser = localStorage.getItem('user');
+        if (storedUser) {
+            try {
+                const parsed = JSON.parse(storedUser);
+                setUserRole(parsed?.role || '');
+            } catch (error) {
+                console.warn('Unable to parse user data', error);
+            }
+        }
+    }, []);
+
+    const menuItems = userRole === 'Admin' ? [adminMenuItem, ...baseMenuItems] : baseMenuItems;
 
     return (
         <aside className="w-70 min-h-screen bg-blue-950 flex flex-col">

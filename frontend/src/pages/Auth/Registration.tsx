@@ -9,6 +9,7 @@ interface RegisterData {
     email: string;
     companyname: string;
     password: string;
+    role: string;
     error: string;
 }
 
@@ -20,10 +21,11 @@ function Registration() {
         email: '',
         companyname: '',
         password: '',
+        role: 'Employee',
         error: ''
     });
     const [successMessage, setSuccessMessage] = useState('');
-    const handlingregisterdata = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handlingregisterdata = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         setRegisterData({
             ...RegisterData,
             [e.target.name]: e.target.value,
@@ -34,7 +36,7 @@ function Registration() {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
         e.preventDefault();
 
-        const { name, email, companyname, password } = RegisterData;
+        const { name, email, companyname, password, role } = RegisterData;
 
         try {
             const response = await fetch(
@@ -44,7 +46,7 @@ function Registration() {
                     headers: {
                         "Content-Type": "application/json",
                     },
-                    body: JSON.stringify({ name, email, companyname, password }),
+                    body: JSON.stringify({ name, email, companyname, password, role }),
                 }
             );
 
@@ -55,20 +57,27 @@ function Registration() {
             }
             console.log(data);
             setSuccessMessage(data.message);
-            setRegisterData({ name: '', email: '', companyname: '', password: '', error: '' });
+            setRegisterData({ name: '', email: '', companyname: '', password: '', role: 'Employee', error: '' });
+
+            // setTimeout after Registration go to Login Page
+            const timer = setTimeout(() => {
+                navigate('/Login')
+            }, 1000)
+
+            clearInterval(timer)
 
         } catch (error) {
             console.error(error);
-            alert(error instanceof Error ? error.message  :'Registration error');
+            alert(error instanceof Error ? error.message : 'Registration error');
         }
     };
     return (
         <>
-            <section className='h-dvh flex justify-center items-center'>
-                <div className='w-180 rounded-2xl  flex h-175 shadow-xl/20'>
+            <section className='h-dvh flex justify-center items-center p-2'>
+                <div className='w-180 rounded-2xl  flex h-175 shadow-xl/20  '>
                     <div className='w-87 rounded-tl-2xl rounded-bl-2xl' style={{ backgroundImage: `url(${registerBg})`, backgroundSize: 'cover' }}>
                     </div>
-                    <div className='flex p-4 flex-col  w-sm h-vh'>
+                    <div className='flex p-4 flex-col w-sm h-vh'>
                         <div className='flex flex-wrap justify-center mt-15'>
                             <div className='flex flex-wrap justify-center'>
                                 <h1 className='font-bold text-center'>Create Account</h1>
@@ -119,6 +128,22 @@ function Registration() {
                                             className='p-2 outline-none w-full'
                                             autoComplete='off'
                                         />
+                                    </div>
+                                </div>
+                                <div className='flex flex-col'>
+                                    <label htmlFor="role" className='font-bold p-1 mt-2 text-sm'>Role</label>
+                                    <div className='flex items-center border border-gray-400 rounded-lg px-3'>
+                                        <User size={16} className="text-gray-500" />
+                                        <select
+                                            name="role"
+                                            value={RegisterData.role}
+                                            onChange={handlingregisterdata}
+                                            className='p-2 outline-none w-full bg-white'
+                                        >
+                                            <option value="Admin">Admin</option>
+                                            <option value="Manager">Manager</option>
+                                            <option value="Employee">Employee</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div className='flex flex-col'>

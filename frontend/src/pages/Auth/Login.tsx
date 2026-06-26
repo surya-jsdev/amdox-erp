@@ -4,16 +4,17 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock } from "lucide-react";
 import loginBg from '../../assets/login_bg.png';
 
-
+// Interface Describe the Object
 interface FormData {
   email: string;
   password: string;
   error: string;
 }
+
+// Login Function
 function Login() {
 
   const navigate = useNavigate();
-
 
   const [formData, setFormData] = useState<FormData>({
     email: '',
@@ -29,6 +30,7 @@ function Login() {
     })
   }
 
+  // Handaling LoginForm data 
   const handleLoginForm = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
 
@@ -60,10 +62,13 @@ function Login() {
 
       console.log('Login successful:', data);
       alert(data.message);
-      // Store user data (optional - you can use context or localStorage)
+
+      // Store user data in localStorage
       localStorage.setItem('user', JSON.stringify(data.user));
+
       // Clear form
       setFormData({ email: '', password: '', error: '' });
+
       // Redirect to dashboard
       navigate('/Dashboard');
     } catch (error) {
