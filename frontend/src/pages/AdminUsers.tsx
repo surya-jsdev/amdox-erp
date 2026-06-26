@@ -92,7 +92,7 @@ function AdminUsers() {
                             <div className="rounded-3xl border border-rose-200 bg-rose-50 p-8 text-center text-rose-800">{error}</div>
                         ) : (
                             <div className="overflow-x-auto">
-                                <table className="w-full min-w-[700px] text-sm">
+                                <table className="w-full min-w-175 text-sm">
                                     <thead className="bg-slate-100 text-slate-600">
                                         <tr>
                                             <th className="px-4 py-4 text-left font-medium">Name</th>
