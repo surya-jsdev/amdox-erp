@@ -11,10 +11,28 @@ import Ledger from './models/Ledger.js';
 dotenv.config();
 
 const app = express();
+const allowedOrigins = [
+    'https://amdox-erp-tau.vercel.app',
+    'http://localhost:5173',
+    'http://localhost:3000'
+];
 
 app.use(express.json());
 
-app.use(cors());
+app.use(cors({
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+            return;
+        }
+
+        callback(new Error('Not allowed by CORS'));
+    },
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'x-user-role']
+}));
+app.options('*', cors());
 
 app.use('/api/auth', authRoutes);
 app.use('/api/dashboard', dashboardRoutes);
@@ -23,7 +41,11 @@ app.use('/api/admin', adminRoutes);
 
 app.get('/', (req, res) => {
     res.send('server Running Successfully')
-})
+});
+
+app.get('/health', (req, res) => {
+    res.json({ status: 'ok' });
+});
 
 const seedLedger = async () => {
     const count = await Ledger.countDocuments();
@@ -44,8 +66,14 @@ const seedLedger = async () => {
 const PORT = process.env.PORT || 5000;
 
 const startServer = async () => {
-    await connectDB();
-    await seedLedger();
+    const dbReady = await connectDB();
+
+    if (dbReady) {
+        await seedLedger();
+    } else {
+        console.warn('Database not available. API routes will return errors until the connection is restored.');
+    }
+
     app.listen(PORT, () => {
         console.log(`Server Running on Port ${PORT}`);
     });
