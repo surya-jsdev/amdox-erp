@@ -12,7 +12,7 @@ dotenv.config();
 
 const app = express();
 const allowedOrigins = [
-    'https://amdox-erp-tau.vercel.app',
+    'https://amdox-erp-eosin.vercel.app',
     'http://localhost:5173',
     'http://localhost:3000'
 ];
