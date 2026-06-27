@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import Aside from '../components/Aside.js';
-import { apiUrl, fetchJson } from '../lib/api';
 
 interface UserItem {
     _id: string;
@@ -19,7 +18,9 @@ function AdminUsers() {
 
     const fetchUsers = async () => {
         try {
-            const data = await fetchJson(apiUrl('/api/admin/users'));
+            const response = await fetch('/api/admin/users');
+            if (!response.ok) throw new Error('Unable to fetch users');
+            const data = await response.json();
             setUsers(data);
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Failed to load users');
@@ -39,7 +40,7 @@ function AdminUsers() {
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const method = editingId ? 'PUT' : 'POST';
-        const url = editingId ? apiUrl(`/api/admin/users/${editingId}`) : apiUrl('/api/admin/users');
+        const url = editingId ? `/api/admin/users/${editingId}` : '/api/admin/users';
 
         try {
             const response = await fetch(url, {
@@ -66,7 +67,7 @@ function AdminUsers() {
 
     const handleDelete = async (id: string) => {
         try {
-            const response = await fetch(apiUrl(`/api/admin/users/${id}`), { method: 'DELETE' });
+            const response = await fetch(`/api/admin/users/${id}`, { method: 'DELETE' });
             const data = await response.json();
             if (!response.ok) throw new Error(data.message || 'Unable to delete user');
             fetchUsers();
@@ -115,7 +116,7 @@ function AdminUsers() {
                                 </div>
 
                                 <div className="hidden overflow-x-auto md:block">
-                                    <table className="w-full min-w-[640px] text-sm">
+                                    <table className="w-full min-w-160 text-sm">
                                         <thead className="bg-slate-100 text-slate-600">
                                             <tr>
                                                 <th className="px-3 py-3 text-left font-medium sm:px-4">Name</th>

@@ -21,7 +21,7 @@ import {
 const baseMenuItems = [
     { name: 'Dashboard', path: '/', icon: HomeIcon },
     { name: 'Finance Ledger', path: '/finance-ledger', icon: DollarSign },
-    { name: 'HR & Payroll', path: '/customers', icon: User },
+    { name: 'HR & Payroll', path: '/hr-payroll', icon: User },
     { name: 'Supply Chain', path: '/vendors', icon: Building2Icon },
     { name: 'Inventory', path: '/inventory', icon: Boxes },
     { name: 'Projects', path: '/projects', icon: Briefcase },

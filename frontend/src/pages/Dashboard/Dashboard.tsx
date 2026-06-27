@@ -14,7 +14,7 @@ import {
   Legend,
 } from 'recharts';
 import Aside from '../../components/Aside.js';
-import { apiUrl, fetchJson } from '../../lib/api';
+
 
 const fallbackData = {
   summary: [
@@ -95,7 +95,11 @@ function Dashboard() {
   useEffect(() => {
     const loadDashboard = async () => {
       try {
-        const data = await fetchJson(apiUrl('/api/dashboard'));
+        const response = await fetch('/api/dashboard');
+        if (!response.ok) {
+          throw new Error('Unable to fetch dashboard data');
+        }
+        const data = await response.json();
         setDashboardData(data);
       } catch (fetchError: unknown) {
         if (fetchError instanceof Error) {
@@ -128,7 +132,7 @@ function Dashboard() {
             </div>
 
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-              <form className="relative w-full sm:min-w-[240px]">
+              <form className="relative w-full sm:min-w-60">
                 <input
                   type="search"
                   placeholder="Search here"

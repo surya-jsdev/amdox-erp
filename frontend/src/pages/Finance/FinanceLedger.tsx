@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Pencil, Plus, Trash2 } from 'lucide-react';
-import Aside from '../components/Aside.js';
-import { apiUrl, fetchJson } from '../lib/api';
+import Aside from '../../components/Aside.js';
+
 
 interface LedgerEntry {
     _id: string;
@@ -58,7 +58,11 @@ function FinanceLedger() {
 
     const fetchLedger = async () => {
         try {
-            const data = await fetchJson(apiUrl('/api/ledger'));
+            const response = await fetch('/api/ledger');
+            if (!response.ok) {
+                throw new Error('Unable to fetch ledger entries');
+            }
+            const data = await response.json();
             setEntries(data);
             setError(null);
         } catch (err) {
@@ -117,7 +121,7 @@ function FinanceLedger() {
         try {
             setSubmitting(true);
             const method = editingId ? 'PUT' : 'POST';
-            const url = editingId ? apiUrl(`/api/ledger/${editingId}`) : apiUrl('/api/ledger');
+            const url = editingId ? `/api/ledger/${editingId}` : '/api/ledger';
             const response = await fetch(url, {
                 method,
                 headers: {
@@ -165,7 +169,7 @@ function FinanceLedger() {
         }
 
         try {
-            const response = await fetch(apiUrl(`/api/ledger/${id}`), {
+            const response = await fetch(`/api/ledger/${id}`, {
                 method: 'DELETE',
                 headers: {
                     'x-user-role': getStoredUserRole()
@@ -186,7 +190,7 @@ function FinanceLedger() {
         <section className="min-h-screen w-full bg-slate-100 text-slate-900 lg:flex">
             <Aside />
             <main className="flex-1 p-3 pt-16 sm:p-6 lg:p-8 lg:pt-6">
-                <div className="rounded-[24px] border border-slate-200 bg-white p-4 shadow-sm sm:p-6">
+                <div className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6">
                     <div className="mb-5 flex flex-col gap-3 sm:mb-6 md:flex-row md:items-start md:justify-between">
                         <div>
                             <p className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-500 sm:text-sm">Finance Ledger</p>
@@ -196,7 +200,7 @@ function FinanceLedger() {
                     </div>
 
                     {isAdmin && (
-                        <form onSubmit={handleSubmit} className="mb-5 rounded-[24px] border border-slate-200 bg-slate-50 p-3 sm:p-4">
+                        <form onSubmit={handleSubmit} className="mb-5 rounded-3xl border border-slate-200 bg-slate-50 p-3 sm:p-4">
                             <div className="mb-3 flex items-center gap-2 text-slate-700">
                                 <Plus size={18} />
                                 <span className="text-sm font-semibold sm:text-base">{editingId ? 'Update ledger entry' : 'Create new ledger entry'}</span>
@@ -291,7 +295,7 @@ function FinanceLedger() {
                             </div>
 
                             <div className="hidden overflow-x-auto lg:block">
-                                <table className="w-full min-w-[720px] border-separate border-spacing-y-3 text-left text-sm">
+                                <table className="w-full min-w-180 border-separate border-spacing-y-3 text-left text-sm">
                                     <thead>
                                         <tr className="bg-slate-100 text-slate-600">
                                             <th className="px-4 py-4 font-medium">Date</th>

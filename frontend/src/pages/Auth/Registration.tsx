@@ -3,7 +3,6 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Mail, Lock, User, Contact, Building2, Contact2, LockKeyhole } from "lucide-react"
 import registerBg from '../../assets/register.png';
-import { apiUrl } from '../../lib/api';
 
 interface RegisterData {
     name: string;
@@ -40,13 +39,15 @@ function Registration() {
         const { name, email, companyname, password, role } = RegisterData;
 
         try {
-            const response = await fetch(apiUrl('/api/auth/register'), {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ name, email, companyname, password, role }),
-            });
+            const response = await fetch("/api/auth/register",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ name, email, companyname, password, role }),
+                }
+            );
 
             const data = await response.json();
 
@@ -57,12 +58,10 @@ function Registration() {
             setSuccessMessage(data.message);
             setRegisterData({ name: '', email: '', companyname: '', password: '', role: 'Employee', error: '' });
 
-            // setTimeout after Registration go to Login Page
-            const timer = setTimeout(() => {
-                navigate('/Login')
-            }, 1000)
-
-            clearInterval(timer)
+            // redirect after successful registration
+            setTimeout(() => {
+                navigate('/Login');
+            }, 1000);
 
         } catch (error) {
             console.error(error);
@@ -70,123 +69,108 @@ function Registration() {
         }
     };
     return (
-        <>
-            <section className='h-dvh flex justify-center items-center p-2'>
-                <div className='w-180 rounded-2xl  flex h-175 shadow-xl/20  '>
-                    <div className='w-87 rounded-tl-2xl rounded-bl-2xl' style={{ backgroundImage: `url(${registerBg})`, backgroundSize: 'cover' }}>
+        <section className='min-h-screen bg-slate-100 px-4 py-8'>
+            <div className='mx-auto grid max-w-5xl overflow-hidden rounded-3xl bg-white shadow-xl shadow-slate-200 sm:grid-cols-[1.1fr_0.9fr]'>
+                <div className='hidden lg:block bg-cover bg-center' style={{ backgroundImage: `url(${registerBg})` }} />
+                <div className='flex flex-col justify-center p-8 sm:p-10'>
+                    <div className='mb-8 text-center lg:text-left'>
+                        <div className='inline-flex items-center justify-center gap-2 text-2xl font-bold text-slate-900 sm:justify-start'>
+                            <span>Create Account</span>
+                            <Contact size={24} className='text-blue-700' />
+                        </div>
+                        <p className='mt-3 text-sm text-slate-500 sm:text-base'>Fill the details below to get started.</p>
                     </div>
-                    <div className='flex p-4 flex-col w-sm h-vh'>
-                        <div className='flex flex-wrap justify-center mt-15'>
-                            <div className='flex flex-wrap justify-center'>
-                                <h1 className='font-bold text-center'>Create Account</h1>
-                                <Contact size={22} className='ml-2' />
-                                <p className='text-center text-gray-400'>Fill the details below to get started</p>
+                    <form onSubmit={handleSubmit} className='space-y-4'>
+                        <div className='space-y-2'>
+                            <label htmlFor='name' className='block text-sm font-semibold text-slate-700'>Full Name</label>
+                            <div className='flex items-center rounded-2xl border border-slate-300 bg-slate-50 px-3'>
+                                <Contact2 size={18} className='text-slate-400' />
+                                <input
+                                    id='name'
+                                    type='text'
+                                    name='name'
+                                    value={RegisterData.name}
+                                    onChange={handlingregisterdata}
+                                    placeholder='Enter your full name'
+                                    className='w-full bg-transparent p-3 text-sm outline-none'
+                                    autoComplete='off'
+                                />
                             </div>
-                            <form onSubmit={handleSubmit} className='mt-2 p-2'>
-                                <div className='flex flex-col'>
-                                    <label htmlFor="name" className='font-bold p-1 mt-2 text-sm'>Full Name</label>
-                                    <div className="flex items-center border border-gray-400 rounded-lg px-3">
-                                        <Contact2 size={16} className="text-gray-500" />
-                                        <input
-                                            type="text"
-                                            name="name"
-                                            value={RegisterData.name}
-                                            onChange={handlingregisterdata}
-                                            placeholder="Enter your full name"
-                                            className="p-2 outline-none w-full"
-                                            autoComplete='off'
-                                        />
-                                    </div>
-                                </div>
-                                <div className='flex flex-col'>
-                                    <label htmlFor="password" className='font-bold p-1 mt-2 text-sm'>Email Address</label>
-                                    <div className='flex items-center border border-gray-400 rounded-lg px-3'>
-                                        <Mail size={16} className="text-gray-500" />
-                                        <input
-                                            type="email"
-                                            name="email"
-                                            value={RegisterData.email}
-                                            onChange={handlingregisterdata}
-                                            placeholder='Enter your email address'
-                                            className='p-2 outline-none w-full'
-                                            autoComplete='off'
-                                        />
-                                    </div>
-                                </div>
-                                <div className='flex flex-col'>
-                                    <label htmlFor="text" className='font-bold p-1 mt-2 text-sm'>Company / Organization</label>
-                                    <div className='flex items-center border border-gray-400 rounded-lg px-3'>
-                                        <Building2 size={16} className="text-gray-500" />
-                                        <input
-                                            type="text"
-                                            name="companyname"
-                                            value={RegisterData.companyname}
-                                            onChange={handlingregisterdata}
-                                            placeholder='Enter your company name'
-                                            className='p-2 outline-none w-full'
-                                            autoComplete='off'
-                                        />
-                                    </div>
-                                </div>
-                                <div className='flex flex-col'>
-                                    <label htmlFor="role" className='font-bold p-1 mt-2 text-sm'>Role</label>
-                                    <div className='flex items-center border border-gray-400 rounded-lg px-3'>
-                                        <User size={16} className="text-gray-500" />
-                                        <select
-                                            name="role"
-                                            value={RegisterData.role}
-                                            onChange={handlingregisterdata}
-                                            className='p-2 outline-none w-full bg-white'
-                                        >
-                                            <option value="Admin">Admin</option>
-                                            <option value="Manager">Manager</option>
-                                            <option value="Employee">Employee</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div className='flex flex-col'>
-                                    <label htmlFor="text" className='font-bold p-1 mt-2 text-sm'>Password</label>
-                                    <div className='flex items-center border border-gray-400 rounded-lg px-3'>
-                                        <LockKeyhole size={16} className="text-gray-500" />
-                                        <input
-                                            type="password"
-                                            name="password"
-                                            value={RegisterData.password}
-                                            onChange={handlingregisterdata}
-                                            placeholder='Create a password'
-                                            className='p-2 outline-none w-full'
-                                            autoComplete='off'
-                                        />
-                                    </div>
-                                </div>
-                                {/* <div className='flex flex-col'>
-                                    <label htmlFor="text" className='font-bold p-1 mt-2 text-sm'>Confirm Password</label>
-                                    <div className='flex items-center border border-gray-400 rounded-lg px-3'>
-                                        <LockKeyhole size={16} className="text-gray-500" />
-                                        <input
-                                            type="password"
-                                            name="password"
-                                            value={RegisterData.confirmpassword}
-                                            onChange={handlingregisterdata}
-                                            placeholder='Confirm your password'
-                                            className='p-2 outline-none w-full'
-                                            autoComplete='off'
-                                        />
-                                    </div>
-                                </div> */}
-                                {/* {formData.error && <p className='text-red-500 text-sm mt-3'>{formData.error}</p>} */}
-
-                                <button type='submit' className='bg-blue-800 text-white text-sm w-xs mt-5 p-2 rounded-xl cursor-pointer'>Create Account</button>
-                                {successMessage && <div className='bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mt-4 text-center'>{successMessage}</div>}
-                            </form>
                         </div>
-                        <div className='text-center mt-6'>
-                            Already have an account ?<Link to='/Login' className='text-blue-700'> Login now</Link>
+                        <div className='space-y-2'>
+                            <label htmlFor='email' className='block text-sm font-semibold text-slate-700'>Email Address</label>
+                            <div className='flex items-center rounded-2xl border border-slate-300 bg-slate-50 px-3'>
+                                <Mail size={18} className='text-slate-400' />
+                                <input
+                                    id='email'
+                                    type='email'
+                                    name='email'
+                                    value={RegisterData.email}
+                                    onChange={handlingregisterdata}
+                                    placeholder='Enter your email address'
+                                    className='w-full bg-transparent p-3 text-sm outline-none'
+                                    autoComplete='off'
+                                />
+                            </div>
                         </div>
+                        <div className='space-y-2'>
+                            <label htmlFor='companyname' className='block text-sm font-semibold text-slate-700'>Company / Organization</label>
+                            <div className='flex items-center rounded-2xl border border-slate-300 bg-slate-50 px-3'>
+                                <Building2 size={18} className='text-slate-400' />
+                                <input
+                                    id='companyname'
+                                    type='text'
+                                    name='companyname'
+                                    value={RegisterData.companyname}
+                                    onChange={handlingregisterdata}
+                                    placeholder='Enter your company name'
+                                    className='w-full bg-transparent p-3 text-sm outline-none'
+                                    autoComplete='off'
+                                />
+                            </div>
+                        </div>
+                        <div className='space-y-2'>
+                            <label htmlFor='role' className='block text-sm font-semibold text-slate-700'>Role</label>
+                            <div className='flex items-center rounded-2xl border border-slate-300 bg-slate-50 px-3'>
+                                <User size={18} className='text-slate-400' />
+                                <select
+                                    id='role'
+                                    name='role'
+                                    value={RegisterData.role}
+                                    onChange={handlingregisterdata}
+                                    className='w-full bg-transparent p-3 text-sm outline-none'
+                                >
+                                    <option value='Admin'>Admin</option>
+                                    <option value='Manager'>Manager</option>
+                                    <option value='Employee'>Employee</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div className='space-y-2'>
+                            <label htmlFor='password' className='block text-sm font-semibold text-slate-700'>Password</label>
+                            <div className='flex items-center rounded-2xl border border-slate-300 bg-slate-50 px-3'>
+                                <LockKeyhole size={18} className='text-slate-400' />
+                                <input
+                                    id='password'
+                                    type='password'
+                                    name='password'
+                                    value={RegisterData.password}
+                                    onChange={handlingregisterdata}
+                                    placeholder='Create a password'
+                                    className='w-full bg-transparent p-3 text-sm outline-none'
+                                    autoComplete='off'
+                                />
+                            </div>
+                        </div>
+                        <button type='submit' className='w-full rounded-2xl bg-blue-800 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-900'>Create Account</button>
+                        {successMessage && <div className='rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-center text-sm text-emerald-700'>{successMessage}</div>}
+                    </form>
+                    <div className='mt-6 text-center text-sm text-slate-500'>
+                        Already have an account? <Link to='/Login' className='font-semibold text-blue-700 hover:text-blue-800'>Login now</Link>
                     </div>
                 </div>
-            </section>
-        </>
+            </div>
+        </section>
     )
 }
 

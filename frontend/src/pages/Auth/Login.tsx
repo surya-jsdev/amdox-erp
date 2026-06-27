@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock } from "lucide-react";
 import loginBg from '../../assets/login_bg.png';
-import { apiUrl, fetchJson } from '../../lib/api';
 
 // Interface Describe the Object
 interface FormData {
@@ -43,13 +42,16 @@ function Login() {
     }
 
     try {
-      const response = await fetch(apiUrl('/api/auth/login'), {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email: formData.email, password: formData.password }),
-      });
+      const response = await fetch(
+        "/api/auth/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email: formData.email, password: formData.password }),
+        }
+      );
 
       const data = await response.json();
 
@@ -76,61 +78,66 @@ function Login() {
   }
 
   return (
-    <>
-      <section className='h-dvh flex justify-center items-center'>
-        <div className='w-auto rounded-2xl  flex h-175 shadow-xl/20'>
-          <div className='w-87 rounded-tl-2xl rounded-bl-2xl' style={{ backgroundImage: `url(${loginBg})`, backgroundSize: 'cover' }}>
-            {/* <h2 className='text-white'>AMDOX<span className='text-blue-800'>ERP</span></h2> */}
+    <section className='min-h-screen bg-slate-100 px-4 py-8'>
+      <div className='mx-auto grid max-w-6xl w-xlg overflow-hidden rounded-3xl bg-white shadow-xl shadow-slate-200 sm:grid-cols-[1.1fr_0.9fr]'>
+        <div className='hidden lg:block bg-cover bg-center h-dvh w-150' style={{ backgroundImage: `url(${loginBg})` }} />
+        <div className='flex min-h-full flex-col justify-center p-6 sm:p-10'>
+          <div className='mb-8 text-center lg:text-left'>
+            <h1 className='text-3xl font-bold text-slate-900 sm:text-4xl'>Welcome Back! 👋</h1>
+            <p className='mt-3 text-sm text-slate-500 sm:text-base'>Sign in to continue to Amdox ERP.</p>
           </div>
-          <div className='flex p-4 flex-col  w-sm h-vh'>
-            <div className='mt-25'>
-              <h1 className='font-bold text-center'>Welcome Back! 👋</h1>
-              <p className='text-center text-gray-400'>Sign in to continue to Amdox ERP</p>
-            </div>
-            <form onSubmit={handleLoginForm} className='mt-5 p-2'>
-              <div className='flex flex-col'>
-                <label htmlFor="email" className='font-bold p-1 mt-2'>Email Address</label>
-                <div className="flex items-center border border-gray-400 rounded-lg px-3">
-                  <Mail size={16} className="text-gray-500" />
-                  <input
-                    type="email"
-                    value={formData.email}
-                    onChange={handlingdata}
-                    name="email"
-                    placeholder="Enter your email address"
-                    className="p-2 outline-none w-full"
-                    autoComplete='off'
-                  />
-                </div>
+
+          <form onSubmit={handleLoginForm} className='space-y-5'>
+            <div className='space-y-3'>
+              <label htmlFor='email' className='block text-sm font-semibold text-slate-700'>Email Address</label>
+              <div className='flex items-center gap-3 rounded-3xl border border-slate-300 bg-slate-50 px-4 py-3'>
+                <Mail size={18} className='text-slate-400' />
+                <input
+                  id='email'
+                  type='email'
+                  value={formData.email}
+                  onChange={handlingdata}
+                  name='email'
+                  placeholder='Enter your email address'
+                  className='w-full bg-transparent text-sm text-slate-900 outline-none'
+                  autoComplete='off'
+                />
               </div>
-              <div className='flex flex-col'>
-                <label htmlFor="password" className='font-bold p-1 mt-2'>Password</label>
-                <div className='flex items-center border border-gray-400 rounded-lg px-3'>
-                  <Lock size={16} className="text-gray-500" />
-                  <input
-                    type="password"
-                    name="password"
-                    value={formData.password}
-                    onChange={handlingdata}
-                    placeholder='Enter your password'
-                    className='p-2 outline-none w-full'
-                    autoComplete='off'
-                  />
-                </div>
+            </div>
+
+            <div className='space-y-3'>
+              <label htmlFor='password' className='block text-sm font-semibold text-slate-700'>Password</label>
+              <div className='flex items-center gap-3 rounded-3xl border border-slate-300 bg-slate-50 px-4 py-3'>
+                <Lock size={18} className='text-slate-400' />
+                <input
+                  id='password'
+                  type='password'
+                  name='password'
+                  value={formData.password}
+                  onChange={handlingdata}
+                  placeholder='Enter your password'
+                  className='w-full bg-transparent text-sm text-slate-900 outline-none'
+                  autoComplete='off'
+                />
               </div>
-              {/* {formData.error && <p className='text-red-500 text-sm mt-3'>{formData.error}</p>} */}
-              <button type='submit' className='bg-blue-800 text-white w-xs mt-5 p-2 rounded-xl cursor-pointer'>Login</button>
-            </form>
-            <div className=' mt-10'>
-              <p className='text-center'>OR</p>
             </div>
-            <div className='text-center mt-6'>
-              Don't have an account? <Link to='/registration' className='text-blue-700'>Register now</Link>
-            </div>
+
+            {formData.error && <p className='text-sm font-medium text-rose-600'>{formData.error}</p>}
+
+            <button type='submit' className='w-full rounded-3xl bg-blue-800 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-900'>
+              Login
+            </button>
+          </form>
+
+          <div className='mt-6 text-center text-sm text-slate-500'>
+            Don't have an account?{' '}
+            <Link to='/registration' className='font-semibold text-blue-700 hover:text-blue-800'>
+              Register now
+            </Link>
           </div>
         </div>
-      </section>
-    </>
+      </div>
+    </section>
   )
 }
 
