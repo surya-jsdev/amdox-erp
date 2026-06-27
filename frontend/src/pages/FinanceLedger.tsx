@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Pencil, Plus, Trash2 } from 'lucide-react';
 import Aside from '../components/Aside.js';
+import { apiUrl, fetchJson } from '../lib/api';
 
 interface LedgerEntry {
     _id: string;
@@ -57,11 +58,7 @@ function FinanceLedger() {
 
     const fetchLedger = async () => {
         try {
-            const response = await fetch('/api/ledger');
-            if (!response.ok) {
-                throw new Error('Unable to fetch ledger entries');
-            }
-            const data = await response.json();
+            const data = await fetchJson(apiUrl('/api/ledger'));
             setEntries(data);
             setError(null);
         } catch (err) {
@@ -120,7 +117,7 @@ function FinanceLedger() {
         try {
             setSubmitting(true);
             const method = editingId ? 'PUT' : 'POST';
-            const url = editingId ? `/api/ledger/${editingId}` : '/api/ledger';
+            const url = editingId ? apiUrl(`/api/ledger/${editingId}`) : apiUrl('/api/ledger');
             const response = await fetch(url, {
                 method,
                 headers: {
@@ -168,7 +165,7 @@ function FinanceLedger() {
         }
 
         try {
-            const response = await fetch(`/api/ledger/${id}`, {
+            const response = await fetch(apiUrl(`/api/ledger/${id}`), {
                 method: 'DELETE',
                 headers: {
                     'x-user-role': getStoredUserRole()
@@ -186,58 +183,58 @@ function FinanceLedger() {
     };
 
     return (
-        <section className="w-full min-h-screen flex bg-slate-100 text-slate-900">
+        <section className="min-h-screen w-full bg-slate-100 text-slate-900 lg:flex">
             <Aside />
-            <main className="flex-1 p-6 lg:p-8">
-                <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-                    <div className="mb-6 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+            <main className="flex-1 p-3 pt-16 sm:p-6 lg:p-8 lg:pt-6">
+                <div className="rounded-[24px] border border-slate-200 bg-white p-4 shadow-sm sm:p-6">
+                    <div className="mb-5 flex flex-col gap-3 sm:mb-6 md:flex-row md:items-start md:justify-between">
                         <div>
-                            <p className="text-sm uppercase tracking-[0.2em] text-slate-500">Finance Ledger</p>
-                            <h1 className="mt-2 text-3xl font-semibold text-slate-900">Ledger entries</h1>
+                            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-500 sm:text-sm">Finance Ledger</p>
+                            <h1 className="mt-2 text-2xl font-semibold text-slate-900 sm:text-3xl">Ledger entries</h1>
                             <p className="mt-2 text-sm text-slate-600">View all finance transactions with debit, credit, and balance details.</p>
                         </div>
                     </div>
 
                     {isAdmin && (
-                        <form onSubmit={handleSubmit} className="mb-6 rounded-3xl border border-slate-200 bg-slate-50 p-4">
+                        <form onSubmit={handleSubmit} className="mb-5 rounded-[24px] border border-slate-200 bg-slate-50 p-3 sm:p-4">
                             <div className="mb-3 flex items-center gap-2 text-slate-700">
                                 <Plus size={18} />
-                                <span className="font-semibold">{editingId ? 'Update ledger entry' : 'Create new ledger entry'}</span>
+                                <span className="text-sm font-semibold sm:text-base">{editingId ? 'Update ledger entry' : 'Create new ledger entry'}</span>
                             </div>
-                            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+                            <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
                                 <div>
                                     <label className="mb-2 block text-sm font-medium text-slate-700">Date</label>
-                                    <input type="date" name="date" value={formState.date} onChange={handleChange} className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none" required />
+                                    <input type="date" name="date" value={formState.date} onChange={handleChange} className="w-full rounded-2xl border border-slate-200 bg-white px-3 py-2.5 text-sm outline-none sm:px-4 sm:py-3" required />
                                 </div>
                                 <div>
                                     <label className="mb-2 block text-sm font-medium text-slate-700">Description</label>
-                                    <input type="text" name="description" value={formState.description} onChange={handleChange} placeholder="Payment received" className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none" required />
+                                    <input type="text" name="description" value={formState.description} onChange={handleChange} placeholder="Payment received" className="w-full rounded-2xl border border-slate-200 bg-white px-3 py-2.5 text-sm outline-none sm:px-4 sm:py-3" required />
                                 </div>
                                 <div>
                                     <label className="mb-2 block text-sm font-medium text-slate-700">Category</label>
-                                    <input type="text" name="category" value={formState.category} onChange={handleChange} placeholder="Sales" className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none" required />
+                                    <input type="text" name="category" value={formState.category} onChange={handleChange} placeholder="Sales" className="w-full rounded-2xl border border-slate-200 bg-white px-3 py-2.5 text-sm outline-none sm:px-4 sm:py-3" required />
                                 </div>
                                 <div>
                                     <label className="mb-2 block text-sm font-medium text-slate-700">Type</label>
-                                    <select name="type" value={formState.type} onChange={handleChange} className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none">
+                                    <select name="type" value={formState.type} onChange={handleChange} className="w-full rounded-2xl border border-slate-200 bg-white px-3 py-2.5 text-sm outline-none sm:px-4 sm:py-3">
                                         <option value="Debit">Debit</option>
                                         <option value="Credit">Credit</option>
                                     </select>
                                 </div>
                                 <div>
                                     <label className="mb-2 block text-sm font-medium text-slate-700">Amount</label>
-                                    <input type="number" name="amount" value={formState.amount} onChange={handleChange} placeholder="1200" className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none" required />
+                                    <input type="number" name="amount" value={formState.amount} onChange={handleChange} placeholder="1200" className="w-full rounded-2xl border border-slate-200 bg-white px-3 py-2.5 text-sm outline-none sm:px-4 sm:py-3" required />
                                 </div>
                                 <div>
                                     <label className="mb-2 block text-sm font-medium text-slate-700">Balance</label>
-                                    <input type="number" name="balance" value={formState.balance} onChange={handleChange} placeholder="5000" className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none" required />
+                                    <input type="number" name="balance" value={formState.balance} onChange={handleChange} placeholder="5000" className="w-full rounded-2xl border border-slate-200 bg-white px-3 py-2.5 text-sm outline-none sm:px-4 sm:py-3" required />
                                 </div>
                             </div>
-                            <div className="mt-4 flex flex-wrap gap-3">
-                                <button type="submit" disabled={submitting} className="rounded-2xl bg-blue-700 px-4 py-2 font-medium text-white disabled:cursor-not-allowed disabled:opacity-60">
+                            <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:flex-wrap">
+                                <button type="submit" disabled={submitting} className="w-full rounded-2xl bg-blue-700 px-4 py-2.5 font-medium text-white transition hover:bg-blue-800 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto">
                                     {submitting ? 'Saving...' : editingId ? 'Update entry' : 'Create entry'}
                                 </button>
-                                <button type="button" onClick={resetForm} className="rounded-2xl border border-slate-300 px-4 py-2 font-medium text-slate-700">
+                                <button type="button" onClick={resetForm} className="w-full rounded-2xl border border-slate-300 px-4 py-2.5 font-medium text-slate-700 transition hover:bg-slate-100 sm:w-auto">
                                     Cancel
                                 </button>
                             </div>
@@ -247,54 +244,92 @@ function FinanceLedger() {
 
                     {!isAdmin && (
                         <div className="mb-4 rounded-2xl border border-amber-200 bg-amber-50 p-3 text-sm text-amber-700">
-                            Only admins can add, update, or delete ledger entries.
+                            Only admins can Access ledger entries.
                         </div>
                     )}
 
                     {loading ? (
-                        <div className="rounded-3xl border border-slate-200 bg-slate-50 p-8 text-center text-slate-600">Loading ledger entries...</div>
+                        <div className="rounded-3xl border border-slate-200 bg-slate-50 p-6 text-center text-sm text-slate-600 sm:p-8">Loading ledger entries...</div>
                     ) : error ? (
-                        <div className="rounded-3xl border border-rose-200 bg-rose-50 p-8 text-center text-rose-800">{error}</div>
+                        <div className="rounded-3xl border border-rose-200 bg-rose-50 p-6 text-center text-sm text-rose-800 sm:p-8">{error}</div>
                     ) : (
-                        <div className="overflow-x-auto">
-                            <table className="w-full min-w-225 border-separate border-spacing-y-3 text-left text-sm">
-                                <thead>
-                                    <tr className="bg-slate-100 text-slate-600">
-                                        <th className="px-4 py-4 font-medium">Date</th>
-                                        <th className="px-4 py-4 font-medium">Description</th>
-                                        <th className="px-4 py-4 font-medium">Category</th>
-                                        <th className="px-4 py-4 font-medium">Type</th>
-                                        <th className="px-4 py-4 font-medium">Amount</th>
-                                        <th className="px-4 py-4 font-medium">Balance</th>
-                                        {isAdmin && <th className="px-4 py-4 font-medium">Actions</th>}
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {entries.map((entry) => (
-                                        <tr key={entry._id} className="rounded-3xl border border-slate-200 bg-white shadow-sm">
-                                            <td className="whitespace-nowrap px-4 py-4 text-slate-600">{new Date(entry.date).toLocaleDateString()}</td>
-                                            <td className="px-4 py-4 text-slate-900">{entry.description}</td>
-                                            <td className="px-4 py-4 text-slate-600">{entry.category}</td>
-                                            <td className={`px-4 py-4 font-semibold ${entry.type === 'Debit' ? 'text-rose-600' : 'text-emerald-600'}`}>{entry.type}</td>
-                                            <td className="px-4 py-4 text-slate-900">₹{entry.amount.toLocaleString()}</td>
-                                            <td className="px-4 py-4 text-slate-900">₹{entry.balance.toLocaleString()}</td>
-                                            {isAdmin && (
-                                                <td className="px-4 py-4">
-                                                    <div className="flex gap-2">
-                                                        <button type="button" onClick={() => handleEdit(entry)} className="rounded-full border border-slate-300 p-2 text-slate-700 hover:bg-slate-100">
-                                                            <Pencil size={16} />
-                                                        </button>
-                                                        <button type="button" onClick={() => handleDelete(entry._id)} className="rounded-full border border-rose-200 p-2 text-rose-600 hover:bg-rose-50">
-                                                            <Trash2 size={16} />
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                            )}
+                        <>
+                            <div className="space-y-3 lg:hidden">
+                                {entries.map((entry) => (
+                                    <div key={entry._id} className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+                                        <div className="flex items-start justify-between gap-3">
+                                            <div>
+                                                <p className="text-sm font-semibold text-slate-900">{entry.description}</p>
+                                                <p className="mt-1 text-xs text-slate-500">{new Date(entry.date).toLocaleDateString()} • {entry.category}</p>
+                                            </div>
+                                            <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${entry.type === 'Debit' ? 'bg-rose-50 text-rose-600' : 'bg-emerald-50 text-emerald-600'}`}>
+                                                {entry.type}
+                                            </span>
+                                        </div>
+
+                                        <div className="mt-3 flex items-center justify-between text-sm">
+                                            <span className="text-slate-600">Amount</span>
+                                            <span className="font-semibold text-slate-900">₹{entry.amount.toLocaleString()}</span>
+                                        </div>
+                                        <div className="mt-2 flex items-center justify-between text-sm">
+                                            <span className="text-slate-600">Balance</span>
+                                            <span className="font-semibold text-slate-900">₹{entry.balance.toLocaleString()}</span>
+                                        </div>
+
+                                        {isAdmin && (
+                                            <div className="mt-3 flex gap-2">
+                                                <button type="button" onClick={() => handleEdit(entry)} className="flex-1 rounded-full border border-slate-300 px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100">
+                                                    Edit
+                                                </button>
+                                                <button type="button" onClick={() => handleDelete(entry._id)} className="flex-1 rounded-full border border-rose-200 px-3 py-2 text-sm font-medium text-rose-600 hover:bg-rose-50">
+                                                    Delete
+                                                </button>
+                                            </div>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+
+                            <div className="hidden overflow-x-auto lg:block">
+                                <table className="w-full min-w-[720px] border-separate border-spacing-y-3 text-left text-sm">
+                                    <thead>
+                                        <tr className="bg-slate-100 text-slate-600">
+                                            <th className="px-4 py-4 font-medium">Date</th>
+                                            <th className="px-4 py-4 font-medium">Description</th>
+                                            <th className="px-4 py-4 font-medium">Category</th>
+                                            <th className="px-4 py-4 font-medium">Type</th>
+                                            <th className="px-4 py-4 font-medium">Amount</th>
+                                            <th className="px-4 py-4 font-medium">Balance</th>
+                                            {isAdmin && <th className="px-4 py-4 font-medium">Actions</th>}
                                         </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
+                                    </thead>
+                                    <tbody>
+                                        {entries.map((entry) => (
+                                            <tr key={entry._id} className="rounded-3xl border border-slate-200 bg-white shadow-sm">
+                                                <td className="whitespace-nowrap px-4 py-4 text-slate-600">{new Date(entry.date).toLocaleDateString()}</td>
+                                                <td className="px-4 py-4 text-slate-900">{entry.description}</td>
+                                                <td className="px-4 py-4 text-slate-600">{entry.category}</td>
+                                                <td className={`px-4 py-4 font-semibold ${entry.type === 'Debit' ? 'text-rose-600' : 'text-emerald-600'}`}>{entry.type}</td>
+                                                <td className="px-4 py-4 text-slate-900">₹{entry.amount.toLocaleString()}</td>
+                                                <td className="px-4 py-4 text-slate-900">₹{entry.balance.toLocaleString()}</td>
+                                                {isAdmin && (
+                                                    <td className="px-4 py-4">
+                                                        <div className="flex gap-2">
+                                                            <button type="button" onClick={() => handleEdit(entry)} className="rounded-full border border-slate-300 p-2 text-slate-700 hover:bg-slate-100">
+                                                                <Pencil size={16} />
+                                                            </button>
+                                                            <button type="button" onClick={() => handleDelete(entry._id)} className="rounded-full border border-rose-200 p-2 text-rose-600 hover:bg-rose-50">
+                                                                <Trash2 size={16} />
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                )}
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </>
                     )}
                 </div>
             </main>

@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Mail, Lock, User, Contact, Building2, Contact2, LockKeyhole } from "lucide-react"
 import registerBg from '../../assets/register.png';
+import { apiUrl } from '../../lib/api';
 
 interface RegisterData {
     name: string;
@@ -39,16 +40,13 @@ function Registration() {
         const { name, email, companyname, password, role } = RegisterData;
 
         try {
-            const response = await fetch(
-                "http://localhost:5000/api/auth/register",
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({ name, email, companyname, password, role }),
-                }
-            );
+            const response = await fetch(apiUrl('/api/auth/register'), {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ name, email, companyname, password, role }),
+            });
 
             const data = await response.json();
 

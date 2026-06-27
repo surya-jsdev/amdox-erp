@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock } from "lucide-react";
 import loginBg from '../../assets/login_bg.png';
+import { apiUrl, fetchJson } from '../../lib/api';
 
 // Interface Describe the Object
 interface FormData {
@@ -42,16 +43,13 @@ function Login() {
     }
 
     try {
-      const response = await fetch(
-        "http://localhost:5000/api/auth/login",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email: formData.email, password: formData.password }),
-        }
-      );
+      const response = await fetch(apiUrl('/api/auth/login'), {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: formData.email, password: formData.password }),
+      });
 
       const data = await response.json();
 

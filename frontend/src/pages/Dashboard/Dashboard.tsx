@@ -14,6 +14,7 @@ import {
   Legend,
 } from 'recharts';
 import Aside from '../../components/Aside.js';
+import { apiUrl, fetchJson } from '../../lib/api';
 
 const fallbackData = {
   summary: [
@@ -94,11 +95,7 @@ function Dashboard() {
   useEffect(() => {
     const loadDashboard = async () => {
       try {
-        const response = await fetch('/api/dashboard');
-        if (!response.ok) {
-          throw new Error('Unable to fetch dashboard data');
-        }
-        const data = await response.json();
+        const data = await fetchJson(apiUrl('/api/dashboard'));
         setDashboardData(data);
       } catch (fetchError: unknown) {
         if (fetchError instanceof Error) {
@@ -118,28 +115,28 @@ function Dashboard() {
   const expenseCategories = dashboardData.expenseCategories;
 
   return (
-    <section className="w-full min-h-screen flex bg-slate-100 text-slate-900">
+    <section className="w-full min-h-screen flex flex-col bg-slate-100 text-slate-900 lg:flex-row">
       <Aside />
 
-      <main className="flex-1 p-6 lg:p-8">
+      <main className="flex-1 p-4 sm:p-6 lg:p-8">
         <div className="flex flex-col gap-6">
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-            <div>
-              <p className="text-sm uppercase tracking-[0.2em] text-slate-500">Dashboard</p>
-              <h1 className="mt-2 text-3xl font-semibold text-slate-900">Welcome back, {userName}!</h1>
+            <div className="mt-12 sm:mt-2">
+              <p className="text-xs uppercase tracking-[0.2em] text-slate-500 sm:text-sm">Dashboard</p>
+              <h1 className="mt-2 text-2xl font-semibold text-slate-900 sm:text-3xl">Welcome back, {userName}!</h1>
               <p className="mt-2 text-sm text-slate-600">Here&rsquo;s what&rsquo;s happening in your organization today.</p>
             </div>
 
-            <div className="flex items-center gap-3">
-              <form className="relative">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+              <form className="relative w-full sm:min-w-[240px]">
                 <input
                   type="search"
                   placeholder="Search here"
-                  className="h-12 rounded-full border border-slate-300 bg-white px-4 pr-11 text-sm shadow-sm outline-none transition focus:border-blue-500"
+                  className="h-12 w-full rounded-full border border-slate-300 bg-white px-4 pr-11 text-sm shadow-sm outline-none transition focus:border-blue-500"
                 />
                 <Search size={18} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400" />
               </form>
-              <div className="flex h-12 w-12 items-center justify-center rounded-full border border-slate-200 bg-slate-900 text-lg font-semibold text-white">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-slate-900 text-lg font-semibold text-white">
                 {userName ? userName.charAt(0).toUpperCase() : 'J'}
               </div>
             </div>
@@ -188,7 +185,7 @@ function Dashboard() {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <div className="rounded-3xl bg-slate-50 p-5">
                       <p className="text-sm text-slate-500">This month revenue</p>
                       <p className="mt-3 text-2xl font-semibold text-slate-900">$72,000</p>
@@ -199,7 +196,7 @@ function Dashboard() {
                     </div>
                   </div>
 
-                  <div className="mt h-80 rounded-3xl border border-slate-200 bg-slate-50 p-4">
+                  <div className="mt-6 h-72 overflow-hidden rounded-3xl border border-slate-200 bg-slate-50 p-4 sm:h-80">
                     <ResponsiveContainer width="100%" height="100%">
                       <AreaChart data={revenueSeries} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
                         <defs>
@@ -232,7 +229,7 @@ function Dashboard() {
                     <div className="rounded-full bg-slate-50 px-3 py-2 text-xs text-slate-600">Total $1,28,000</div>
                   </div>
 
-                  <div className="mb-6  h-68 rounded-3xl bg-slate-50 p-2">
+                  <div className="mb-6 h-64 rounded-3xl bg-slate-50 p-2 sm:h-72">
                     <ResponsiveContainer width="100%" height="100%">
                       <PieChart >
                         <Legend verticalAlign="top" height={36} iconType="circle" />
@@ -247,7 +244,7 @@ function Dashboard() {
 
                   <div className="space-y-4">
                     {expenseCategories.map((item) => (
-                      <div key={item.category} className="flex items-center justify-between gap-3 rounded-2xl bg-slate-50 p-4">
+                      <div key={item.category} className="flex flex-col gap-2 rounded-2xl bg-slate-50 p-4 sm:flex-row sm:items-center sm:justify-between">
                         <div className="flex items-center gap-3">
                           <span className="inline-flex h-3.5 w-3.5 rounded-full" style={{ backgroundColor: item.color }} />
                           <div>
