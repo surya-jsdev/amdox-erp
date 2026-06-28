@@ -95,7 +95,7 @@ function Dashboard() {
   useEffect(() => {
     const loadDashboard = async () => {
       try {
-        const response = await fetch('/api/dashboard');
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/dashboard`);
         if (!response.ok) {
           throw new Error('Unable to fetch dashboard data');
         }
