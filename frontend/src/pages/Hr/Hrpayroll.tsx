@@ -466,6 +466,7 @@ function Hrpayroll() {
                     </div>
                 )}
 
+{/* Leave Tab */}
                 {selectedTab === 'leave' && (
                     <div className='grid gap-6 xl:grid-cols-[1fr_1.2fr]'>
                         <section className='rounded-3xl border border-slate-200 bg-slate-50 p-6'>
