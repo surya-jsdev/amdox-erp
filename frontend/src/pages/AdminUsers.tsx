@@ -18,7 +18,7 @@ function AdminUsers() {
 
     const fetchUsers = async () => {
         try {
-            const response = await fetch('/api/admin/users');
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/users`);
             if (!response.ok) throw new Error('Unable to fetch users');
             const data = await response.json();
             setUsers(data);
