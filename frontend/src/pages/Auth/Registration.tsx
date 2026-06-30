@@ -39,7 +39,7 @@ function Registration() {
         const { name, email, companyname, password, role } = RegisterData;
 
         try {
-            const response = await fetch("/api/auth/register",
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/register`,
                 {
                     method: "POST",
                     headers: {

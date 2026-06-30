@@ -43,7 +43,7 @@ function Login() {
 
     try {
       const response = await fetch(
-        "/api/auth/login",
+        `${import.meta.env.VITE_API_URL}/api/auth/login`,
         {
           method: "POST",
           headers: {
@@ -79,7 +79,7 @@ function Login() {
 
   return (
     <section className='min-h-screen bg-slate-100 px-4 py-8'>
-      <div className='mx-auto grid max-w-6xl w-xlg overflow-hidden rounded-3xl bg-white shadow-xl shadow-slate-200 sm:grid-cols-[1.1fr_0.9fr]'>
+      <div className='mx-auto grid max-w-6xl w-xlg overflow-hidden rounded-3xl bg-white shadow-xl shadow-slate-200 sm:grid-cols-[1.1fr_0.9fr] mt-20'>
         <div className='hidden lg:block bg-cover bg-center h-dvh w-150' style={{ backgroundImage: `url(${loginBg})` }} />
         <div className='flex min-h-full flex-col justify-center p-6 sm:p-10'>
           <div className='mb-8 text-center lg:text-left'>
