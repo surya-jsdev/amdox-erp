@@ -19,7 +19,7 @@ import {
 } from 'lucide-react'
 
 const baseMenuItems = [
-    { name: 'Dashboard', path: '/', icon: HomeIcon },
+    { name: 'Dashboard', path: '/Dashboard', icon: HomeIcon },
     { name: 'Finance Ledger', path: '/finance-ledger', icon: DollarSign },
     { name: 'HR & Payroll', path: '/hr-payroll', icon: User },
     { name: 'Supply Chain', path: '/vendors', icon: Building2Icon },
