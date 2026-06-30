@@ -153,7 +153,7 @@ function Hrpayroll() {
         resetNotifications();
 
         const method = employeeEditingId ? 'PUT' : 'POST';
-        const url = employeeEditingId ? `/api/hr/employees/${employeeEditingId}` : '/api/hr/employees';
+        const url = employeeEditingId ? `${import.meta.env.VITE_API_URL}/api/hr/employees/${employeeEditingId}` : '/api/hr/employees';
 
         try {
             const response = await fetch(url, {

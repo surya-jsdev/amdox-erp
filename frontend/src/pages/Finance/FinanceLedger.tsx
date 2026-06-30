@@ -58,7 +58,7 @@ function FinanceLedger() {
 
     const fetchLedger = async () => {
         try {
-            const response = await fetch('/api/ledger');
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/ledger`);
             if (!response.ok) {
                 throw new Error('Unable to fetch ledger entries');
             }
