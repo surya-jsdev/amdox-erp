@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom';
 import { Search, ArrowUpRight, ArrowDownRight, Circle, Clock3 } from 'lucide-react';
 import {
   AreaChart,
@@ -14,6 +15,7 @@ import {
   Legend,
 } from 'recharts';
 import Aside from '../../components/Aside.js';
+
 
 
 const fallbackData = {
@@ -95,7 +97,7 @@ function Dashboard() {
   useEffect(() => {
     const loadDashboard = async () => {
       try {
-        const response = await fetch('/api/dashboard');
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/dashboard`);
         if (!response.ok) {
           throw new Error('Unable to fetch dashboard data');
         }
@@ -140,9 +142,9 @@ function Dashboard() {
                 />
                 <Search size={18} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400" />
               </form>
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-slate-900 text-lg font-semibold text-white">
+              <Link to="/profile" className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-slate-900 text-lg font-semibold text-white">
                 {userName ? userName.charAt(0).toUpperCase() : 'J'}
-              </div>
+              </Link>
             </div>
           </div>
 

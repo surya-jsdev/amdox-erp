@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { Children, useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import {
     HomeIcon, DollarSign, User, Building2Icon, Folder, LucideTimer, Package,
@@ -38,6 +38,7 @@ const adminMenuItem = { name: 'Admin', path: '/admin/users', icon: UserCog }
 function Aside() {
     const [userRole, setUserRole] = useState('');
     const [isOpen, setIsOpen] = useState(false);
+    // const [openDropdown, setOpenDropdown] = useState(null)
 
     useEffect(() => {
         const storedUser = localStorage.getItem('user');

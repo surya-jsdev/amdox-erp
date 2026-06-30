@@ -282,9 +282,9 @@ function Hrpayroll() {
 
 
     return (
-        <section className='h-dvh min-w-full bg-slate-100  flex'>
+        <section className='h-dvh max-w-full flex'>
             <Aside />
-            <main className=' max-w-6xl rounded-3xl border border-slate-200 bg-white p-6 shadow-sm'>
+            <main className=' max-w-full rounded-3xl border border-slate-200 bg-white p-6 shadow-sm'>
                 <div className='mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between'>
                     <div>
                         <p className='text-xs uppercase tracking-[0.2em] text-slate-500'>HR & Payroll</p>
