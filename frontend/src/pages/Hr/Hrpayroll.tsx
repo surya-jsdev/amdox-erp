@@ -147,13 +147,13 @@ function Hrpayroll() {
             status: leave.status,
         });
     };
-   
+
     const handleEmployeeSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         resetNotifications();
 
         const method = employeeEditingId ? 'PUT' : 'POST';
-        const url = employeeEditingId ? `${import.meta.env.VITE_API_URL}/api/hr/employees/${employeeEditingId}` : '/api/hr/employees';
+        const url = employeeEditingId ? `${import.meta.env.VITE_API_URL}/api/hr/employees/${employeeEditingId}` : `${import.meta.env.VITE_API_URL}/api/hr/employees`;
 
         try {
             const response = await fetch(url, {
@@ -466,7 +466,7 @@ function Hrpayroll() {
                     </div>
                 )}
 
-{/* Leave Tab */}
+                {/* Leave Tab */}
                 {selectedTab === 'leave' && (
                     <div className='grid gap-6 xl:grid-cols-[1fr_1.2fr]'>
                         <section className='rounded-3xl border border-slate-200 bg-slate-50 p-6'>

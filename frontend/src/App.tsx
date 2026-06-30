@@ -10,7 +10,7 @@ import Profile from './pages/Profile/Profile.js';
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<Dashboard />} />
+      <Route path="/" element={<Login />} />
       <Route path="/Login" element={<Login />} />
       <Route path="/registration" element={<Registration />} />
       <Route path='/Dashboard' element={<Dashboard />} />
