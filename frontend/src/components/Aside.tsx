@@ -69,7 +69,7 @@ const baseMenuItems: MenuItem[] = [
     { name: 'Logout', path: '/logout', icon: LogOut }
 ]
 
-const adminMenuItem: MenuItem  = { name: 'Admin', path: '/admin/users', icon: UserCog }
+const adminMenuItem: MenuItem = { name: 'Admin', path: '/admin/users', icon: UserCog }
 
 function Aside() {
     const location = useLocation();
@@ -130,9 +130,9 @@ function Aside() {
             )}
 
             <aside
-                className={`fixed left-0 top-0 z-50 h-full-screen w-72 bg-blue-950 transition-transform duration-300
+                className={`fixed left-0 top-0 z-50 h-screen w-72 overflow-y-auto bg-blue-950 transition-transform duration-300
         ${isOpen ? "translate-x-0" : "-translate-x-full"}
-        lg:translate-x-0 lg:static`}
+        lg:translate-x-0 lg:sticky lg:top-0 lg:h-screen`}
             >
                 {/* Logo */}
 
