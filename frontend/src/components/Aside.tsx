@@ -60,11 +60,6 @@ const baseMenuItems: MenuItem[] = [
                 path: '/inventory',
                 icon: Warehouse
             },
-            {
-                name: 'Forecasting',
-                path: '/forecasting',
-                icon: Brain
-            }
         ]
     },
     { name: 'Projects', path: '/projects', icon: Briefcase },

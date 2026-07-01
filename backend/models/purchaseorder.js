@@ -5,40 +5,78 @@ const purchaseOrderSchema = new mongoose.Schema({
     poNumber: {
         type: String,
         required: true,
-        unique: true
+        unique: true,
+        trim: true
     },
     vendor: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "vendor",
-        required: true
+        ref: 'vendor',
+        required: true,
     },
     items: [
         {
-            item: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: "Inventory"
+            description: {
+                type: String,
+                required: true,
+                trim: true,
             },
-
-            quantity: Number,
-            unitPrice: Number,
-            total: Number
+            quantity: {
+                type: Number,
+                required: true,
+                min: 1,
+            },
+            unitPrice: {
+                type: Number,
+                required: true,
+                min: 0,
+            },
+            total: {
+                type: Number,
+                required: true,
+                min: 0,
+            },
         }
     ],
-
-    totalAmount: Number,
-
+    totalAmount: {
+        type: Number,
+        required: true,
+        min: 0,
+    },
     status: {
         type: String,
         enum: [
-            "Pending",
-            "Approved",
-            "Received",
-            "Cancelled"
+            'Pending',
+            'Approved',
+            'Received',
+            'Cancelled'
         ],
-        default: "Pending"
+        default: 'Pending'
     },
-
-    expectedDeliveryDate: Date
+    expectedDeliveryDate: {
+        type: Date,
+        default: null,
+    },
+    notes: {
+        type: String,
+        trim: true,
+        default: '',
+    },
+    createdBy: {
+        type: String,
+        default: null,
+    },
+    approvedBy: {
+        type: String,
+        default: null,
+    },
+    history: [
+        {
+            status: String,
+            changedBy: String,
+            changedAt: Date,
+            comment: String,
+        }
+    ]
 }, { timestamps: true });
 
 
