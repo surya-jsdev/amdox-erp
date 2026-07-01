@@ -4,12 +4,26 @@ import User from "../models/User.js";
 
 export const registerUser = async (req, res) => {
     try {
+  const {
+            name,
+            email,
+            companyname,
+            password,
+            confirmpassword,
+            role
+        } = req.body;
+
+        if (password !== confirmpassword) {
+            return res.status(400).json({
+                message: "Passwords do not match"
+            });
+        }
         const newUser = await User.create({
-            name: req.body.name,
-            email: req.body.email,
-            companyname: req.body.companyname,
-            password: req.body.password,
-            role: req.body.role
+            name,
+            email,
+            companyname,
+            password,
+            role
         });
         res.status(201).json({ message: 'User created successfully', user: newUser });
     }
