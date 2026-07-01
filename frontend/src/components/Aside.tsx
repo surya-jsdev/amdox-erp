@@ -65,8 +65,6 @@ const baseMenuItems: MenuItem[] = [
     { name: 'Projects', path: '/projects', icon: Briefcase },
     { name: 'Business Intelligence', path: '/reports', icon: BarChart3 },
     { name: 'AI Forecasting', path: '/tasks', icon: LucideTimer },
-    { name: 'Reports', path: '/files', icon: Folder },
-    { name: 'Support', path: '/support', icon: ShieldCheck },
     { name: 'Settings', path: '/settings', icon: Settings },
     { name: 'Logout', path: '/logout', icon: LogOut }
 ]
@@ -132,7 +130,7 @@ function Aside() {
             )}
 
             <aside
-                className={`fixed left-0 top-0 z-50 h-screen w-72 bg-blue-950 transition-transform duration-300
+                className={`fixed left-0 top-0 z-50 h-full-screen w-72 bg-blue-950 transition-transform duration-300
         ${isOpen ? "translate-x-0" : "-translate-x-full"}
         lg:translate-x-0 lg:static`}
             >

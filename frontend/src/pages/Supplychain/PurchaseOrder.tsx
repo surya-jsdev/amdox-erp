@@ -180,7 +180,7 @@ function PurchaseOrderPage() {
         <section className="min-h-screen w-full bg-slate-100 text-slate-900 lg:flex">
             <Aside />
             <main className="flex-1 p-3 pt-16 sm:p-6 lg:p-8 lg:pt-6">
-                <div className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6">
+                <div className="rounded-3xl border  border-slate-200 bg-white p-4 shadow-sm sm:p-6">
                     <div className="mb-5 flex flex-col gap-3 sm:mb-6 md:flex-row md:items-start md:justify-between">
                         <div>
                             <p className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-500 sm:text-sm">Supply Chain / Purchase Orders</p>

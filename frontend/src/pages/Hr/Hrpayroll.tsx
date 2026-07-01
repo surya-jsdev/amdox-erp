@@ -64,6 +64,13 @@ function Hrpayroll() {
         }
     };
 
+    const appApiUrl = import.meta.env.VITE_API_URL?.trim() || '';
+    const buildUrl = (path: string) => {
+        if (!appApiUrl) return path;
+        const prefix = appApiUrl.endsWith('/') ? appApiUrl.slice(0, -1) : appApiUrl;
+        return `${prefix}${path}`;
+    };
+
     useEffect(() => {
         setIsAdmin(getStoredUserRole() === 'Admin');
     }, []);
@@ -72,9 +79,9 @@ function Hrpayroll() {
         try {
             setLoading(true);
             const [employeeRes, leaveRes, payrollRes] = await Promise.all([
-                fetch(`${import.meta.env.VITE_API_URL}/api/hr/employees`),
-                fetch(`${import.meta.env.VITE_API_URL}/api/hr/leaves`),
-                fetch(`${import.meta.env.VITE_API_URL}/api/hr/payrolls`),
+                fetch(buildUrl('/api/hr/employees')),
+                fetch(buildUrl('/api/hr/leaves')),
+                fetch(buildUrl('/api/hr/payrolls')),
             ]);
 
             if (!employeeRes.ok) throw new Error('Unable to fetch employees');
@@ -153,7 +160,7 @@ function Hrpayroll() {
         resetNotifications();
 
         const method = employeeEditingId ? 'PUT' : 'POST';
-        const url = employeeEditingId ? `${import.meta.env.VITE_API_URL}/api/hr/employees/${employeeEditingId}` : `${import.meta.env.VITE_API_URL}/api/hr/employees`;
+        const url = employeeEditingId ? buildUrl(`/api/hr/employees/${employeeEditingId}`) : buildUrl('/api/hr/employees');
 
         try {
             const response = await fetch(url, {
@@ -183,7 +190,7 @@ function Hrpayroll() {
         resetNotifications();
 
         const method = leaveEditingId ? 'PUT' : 'POST';
-        const url = leaveEditingId ? `/api/hr/leaves/${leaveEditingId}` : '/api/hr/leaves';
+        const url = leaveEditingId ? buildUrl(`/api/hr/leaves/${leaveEditingId}`) : buildUrl('/api/hr/leaves');
 
         try {
             const response = await fetch(url, {
@@ -214,7 +221,7 @@ function Hrpayroll() {
 
         try {
             resetNotifications();
-            const response = await fetch(`/api/hr/leaves/${id}`, {
+            const response = await fetch(buildUrl(`/api/hr/leaves/${id}`), {
                 method: 'DELETE',
                 headers: { 'x-user-role': 'Admin' },
             });
@@ -240,7 +247,7 @@ function Hrpayroll() {
         resetNotifications();
 
         try {
-            const response = await fetch('/api/hr/payrolls', {
+            const response = await fetch(buildUrl('/api/hr/payrolls'), {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'x-user-role': 'Admin' },
                 body: JSON.stringify({
