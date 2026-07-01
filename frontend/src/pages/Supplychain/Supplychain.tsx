@@ -364,7 +364,7 @@ function Supplychain() {
                                 <table className="w-full min-w-225 border-separate border-spacing-y-3 text-left text-sm">
                                     <thead>
                                         <tr className="bg-slate-100 text-slate-600">
-                                            <th className="px-4 py-4 font-medium">#</th>
+                                            <th className="px-4 py-4 font-medium">id</th>
                                             <th className="px-4 py-4 font-medium">Vendor Name</th>
                                             <th className="px-4 py-4 font-medium">Contact Person</th>
                                             <th className="px-4 py-4 font-medium">Email</th>
