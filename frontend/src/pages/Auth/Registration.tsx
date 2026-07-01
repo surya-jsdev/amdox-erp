@@ -9,6 +9,7 @@ interface RegisterData {
     email: string;
     companyname: string;
     password: string;
+    confirmpassword: string;
     role: string;
     error: string;
 }
@@ -21,6 +22,7 @@ function Registration() {
         email: '',
         companyname: '',
         password: '',
+        confirmpassword: '',
         role: 'Employee',
         error: ''
     });
@@ -36,7 +38,7 @@ function Registration() {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
         e.preventDefault();
 
-        const { name, email, companyname, password, role } = RegisterData;
+        const { name, email, companyname, password, confirmpassword, role } = RegisterData;
 
         try {
             const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/register`,
@@ -45,7 +47,7 @@ function Registration() {
                     headers: {
                         "Content-Type": "application/json",
                     },
-                    body: JSON.stringify({ name, email, companyname, password, role }),
+                    body: JSON.stringify({ name, email, companyname, password, confirmpassword, role }),
                 }
             );
 
@@ -56,7 +58,7 @@ function Registration() {
             }
             console.log(data);
             setSuccessMessage(data.message);
-            setRegisterData({ name: '', email: '', companyname: '', password: '', role: 'Employee', error: '' });
+            setRegisterData({ name: '', email: '', companyname: '', password: '', role: 'Employee', confirmpassword: '', error: '' });
 
             // redirect after successful registration
             setTimeout(() => {
@@ -140,8 +142,8 @@ function Registration() {
                                     onChange={handlingregisterdata}
                                     className='w-full bg-transparent p-3 text-sm outline-none'
                                 >
-                                    <option value='Admin'>Admin</option>
-                                    <option value='Manager'>Manager</option>
+                                    {/* <option value='Admin'>Admin</option> */}
+                                    {/* <option value='Manager'>Manager</option> */}
                                     <option value='Employee'>Employee</option>
                                 </select>
                             </div>
@@ -162,6 +164,30 @@ function Registration() {
                                 />
                             </div>
                         </div>
+                        <div className='space-y-2'>
+                            <label htmlFor='password' className='block text-sm font-semibold text-slate-700'>Confirm Password</label>
+                            <div className='flex items-center rounded-2xl border border-slate-300 bg-slate-50 px-3'>
+                                <LockKeyhole size={18} className='text-slate-400' />
+                                <input
+                                    id='confirmpassword'
+                                    type='password'
+                                    name='confirmpassword'
+                                    value={RegisterData.confirmpassword}
+                                    onChange={handlingregisterdata}
+                                    placeholder='Confirm password'
+                                    className='w-full bg-transparent p-3 text-sm outline-none'
+                                    autoComplete='off'
+                                />
+                            </div>
+                        </div>
+                        {RegisterData.confirmpassword &&
+                            RegisterData.password !== RegisterData.confirmpassword && (
+                                <p className="text-red-500 text-sm mt-1">
+                                    Passwords do not match
+                                </p>
+                            )}
+
+
                         <button type='submit' className='w-full rounded-2xl bg-blue-800 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-900'>Create Account</button>
                         {successMessage && <div className='rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-center text-sm text-emerald-700'>{successMessage}</div>}
                     </form>
