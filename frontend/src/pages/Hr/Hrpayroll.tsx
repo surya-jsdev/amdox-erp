@@ -72,9 +72,9 @@ function Hrpayroll() {
         try {
             setLoading(true);
             const [employeeRes, leaveRes, payrollRes] = await Promise.all([
-                fetch('/api/hr/employees'),
-                fetch('/api/hr/leaves'),
-                fetch('/api/hr/payrolls'),
+                fetch(`${import.meta.env.VITE_API_URL}/api/hr/employees`),
+                fetch(`${import.meta.env.VITE_API_URL}/api/hr/leaves`),
+                fetch(`${import.meta.env.VITE_API_URL}/api/hr/payrolls`),
             ]);
 
             if (!employeeRes.ok) throw new Error('Unable to fetch employees');
