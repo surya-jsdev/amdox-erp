@@ -7,6 +7,7 @@ import dashboardRoutes from './routes/dashboardRoutes.js';
 import ledgerRoutes from './routes/ledgerRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
 import hrRoutes from './routes/hrRoutes.js';
+import supplyRoutes from './routes/supplyRoutes.js';
 import Ledger from './models/Ledger.js';
 
 dotenv.config();
@@ -17,11 +18,13 @@ app.use(express.json());
 
 app.use(cors());
 
+
 app.use('/api/auth', authRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/ledger', ledgerRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/hr', hrRoutes);
+app.use('/api/supply', supplyRoutes);
 
 app.get('/', (req, res) => {
     res.send('server Running Successfully')

@@ -78,10 +78,10 @@ function Login() {
   }
 
   return (
-    <section className='min-h-screen bg-slate-100 px-4 py-8'>
-      <div className='mx-auto grid max-w-6xl w-xlg overflow-hidden rounded-3xl bg-white shadow-xl shadow-slate-200 sm:grid-cols-[1.1fr_0.9fr] mt-20'>
-        <div className='hidden lg:block bg-cover bg-center h-dvh w-150' style={{ backgroundImage: `url(${loginBg})` }} />
-        <div className='flex min-h-full flex-col justify-center p-6 sm:p-10'>
+    <section className='max-h-screen bg-slate-100 px-4 py-8'>
+      <div className='mx-auto grid max-w-5xl overflow-hidden rounded-3xl bg-white shadow-xl shadow-slate-200 sm:grid-cols-[1.1fr_0.9fr] mt-20'>
+        <div className='hidden lg:block bg-cover bg-center h-dvh w-120' style={{ backgroundImage: `url(${loginBg})` }} />
+        <div className='flex min-h-full w-lg flex-col justify-center p-6 sm:p-10'>
           <div className='mb-8 text-center lg:text-left'>
             <h1 className='text-3xl font-bold text-slate-900 sm:text-4xl'>Welcome Back! 👋</h1>
             <p className='mt-3 text-sm text-slate-500 sm:text-base'>Sign in to continue to Amdox ERP.</p>

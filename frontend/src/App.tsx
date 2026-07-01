@@ -5,6 +5,7 @@ import Dashboard from './pages/Dashboard/Dashboard.js';
 import FinanceLedger from './pages/Finance/FinanceLedger.js';
 import AdminUsers from './pages/AdminUsers';
 import Hrpayroll from './pages/Hr/Hrpayroll.js';
+import Supplychain from './pages/Supplychain/Supplychain.js';
 import Profile from './pages/Profile/Profile.js';
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
       <Route path="/registration" element={<Registration />} />
       <Route path='/Dashboard' element={<Dashboard />} />
       <Route path='/finance-ledger' element={<FinanceLedger />} />
+      <Route path='/vendors' element={<Supplychain />} />
       <Route path='/admin/users' element={<AdminUsers />} />
       <Route path='/hr-payroll' element={<Hrpayroll />} />
       <Route path='/Profile' element={<Profile />} />
