@@ -18,6 +18,37 @@ const UserSchema = new mongoose.Schema({
         type: String,
         trim: true
     },
+    phone: {
+        type: String,
+        trim: true
+    },
+    department: {
+        type: String,
+        trim: true
+    },
+    designation: {
+        type: String,
+        trim: true
+    },
+    reportingManager: {
+        type: String,
+        trim: true
+    },
+    location: {
+        type: String,
+        trim: true
+    },
+    dateOfJoining: {
+        type: Date
+    },
+    about: {
+        type: String,
+        trim: true
+    },
+    profilePicture: {
+        type: String,
+        trim: true
+    },
     password: {
         type: String,
         required: true,

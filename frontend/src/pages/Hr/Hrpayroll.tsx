@@ -12,6 +12,20 @@ interface Employee {
     joiningDate: string;
 }
 
+interface UserOption {
+    _id: string;
+    name: string;
+    email: string;
+    role?: string;
+}
+
+interface PersonOption {
+    id: string;
+    name: string;
+    email: string;
+    source: 'employee' | 'user';
+}
+
 interface LeaveRequest {
     _id: string;
     employee: Employee;
@@ -40,6 +54,7 @@ const TAB_ITEMS = [
 
 function Hrpayroll() {
     const [employees, setEmployees] = useState<Employee[]>([]);
+    const [peopleOptions, setPeopleOptions] = useState<PersonOption[]>([]);
     const [leaves, setLeaves] = useState<LeaveRequest[]>([]);
     const [payrolls, setPayrolls] = useState<PayrollRecord[]>([]);
     const [selectedTab, setSelectedTab] = useState<(typeof TAB_ITEMS)[number]['id']>('employees');
@@ -75,26 +90,50 @@ function Hrpayroll() {
         setIsAdmin(getStoredUserRole() === 'Admin');
     }, []);
 
+    const buildPersonOptions = (employeeData: Employee[], userData: UserOption[]) => {
+        const seen = new Set<string>();
+        const combined: PersonOption[] = [];
+
+        employeeData.forEach((employee) => {
+            const key = employee.email?.trim().toLowerCase() || employee._id;
+            if (!employee?._id || seen.has(key)) return;
+            seen.add(key);
+            combined.push({ id: employee._id, name: employee.name, email: employee.email, source: 'employee' });
+        });
+
+        userData.forEach((user) => {
+            const key = user.email?.trim().toLowerCase() || user._id;
+            if (!user?._id || seen.has(key)) return;
+            seen.add(key);
+            combined.push({ id: user._id, name: user.name, email: user.email, source: 'user' });
+        });
+
+        return combined;
+    };
+
     const fetchHrData = async () => {
         try {
             setLoading(true);
-            const [employeeRes, leaveRes, payrollRes] = await Promise.all([
+            const [employeeRes, leaveRes, payrollRes, usersRes] = await Promise.all([
                 fetch(buildUrl('/api/hr/employees')),
                 fetch(buildUrl('/api/hr/leaves')),
                 fetch(buildUrl('/api/hr/payrolls')),
+                fetch(buildUrl('/api/admin/users')),
             ]);
 
             if (!employeeRes.ok) throw new Error('Unable to fetch employees');
             if (!leaveRes.ok) throw new Error('Unable to fetch leave requests');
             if (!payrollRes.ok) throw new Error('Unable to fetch payroll records');
 
-            const [employeeData, leaveData, payrollData] = await Promise.all([
+            const [employeeData, leaveData, payrollData, userData] = await Promise.all([
                 employeeRes.json(),
                 leaveRes.json(),
                 payrollRes.json(),
+                usersRes.ok ? usersRes.json() : [],
             ]);
 
             setEmployees(employeeData);
+            setPeopleOptions(buildPersonOptions(employeeData, userData));
             setLeaves(leaveData);
             setPayrolls(payrollData);
             setError('');
@@ -489,8 +528,8 @@ function Hrpayroll() {
                                         required
                                     >
                                         <option value=''>Choose employee</option>
-                                        {employees.map((employee) => (
-                                            <option key={employee._id} value={employee._id}>{employee.name}</option>
+                                        {peopleOptions.map((person) => (
+                                            <option key={person.id} value={person.id}>{person.name}</option>
                                         ))}
                                     </select>
                                 </div>
@@ -633,8 +672,8 @@ function Hrpayroll() {
                                         required
                                     >
                                         <option value=''>Select employee</option>
-                                        {employees.map((employee) => (
-                                            <option key={employee._id} value={employee._id}>{employee.name}</option>
+                                        {peopleOptions.map((person) => (
+                                            <option key={person.id} value={person.id}>{person.name}</option>
                                         ))}
                                     </select>
                                 </div>

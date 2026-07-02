@@ -9,6 +9,7 @@ import adminRoutes from './routes/adminRoutes.js';
 import hrRoutes from './routes/hrRoutes.js';
 import supplyRoutes from './routes/supplyRoutes.js';
 import purchaseOrderRoutes from './routes/purchaseOrderRoutes.js';
+import profileRoutes from './routes/profileRoutes.js';
 import Ledger from './models/Ledger.js';
 
 dotenv.config();
@@ -21,6 +22,7 @@ app.use(cors());
 
 
 app.use('/api/auth', authRoutes);
+app.use('/api/profile', profileRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/ledger', ledgerRoutes);
 app.use('/api/admin', adminRoutes);

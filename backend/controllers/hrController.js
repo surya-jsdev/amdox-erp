@@ -1,6 +1,27 @@
 import Employee from '../models/Employee.js';
 import Leave from '../models/Leave.js';
 import Payroll from '../models/Payroll.js';
+import User from '../models/User.js';
+
+const resolveEmployeeReference = async (employeeId) => {
+    if (!employeeId) return null;
+
+    let employee = await Employee.findById(employeeId);
+    if (employee) return employee;
+
+    const user = await User.findById(employeeId).select('-password');
+    if (!user) return null;
+
+    return Employee.create({
+        name: user.name,
+        email: user.email,
+        department: 'General',
+        joiningDate: new Date(),
+        role: user.role || 'Employee',
+        salary: 0,
+        status: 'Active',
+    });
+};
 
 export const createEmployee = async (req, res) => {
     try {
@@ -67,7 +88,8 @@ export const deleteEmployee = async (req, res) => {
 export const createLeave = async (req, res) => {
     try {
         const { employee, type, startDate, endDate, reason, requestedBy } = req.body;
-        const leave = await Leave.create({ employee, type, startDate, endDate, reason, requestedBy });
+        const resolvedEmployee = await resolveEmployeeReference(employee);
+        const leave = await Leave.create({ employee: resolvedEmployee?._id || employee, type, startDate, endDate, reason, requestedBy });
         res.status(201).json({ message: 'Leave request created', leave });
     } catch (error) {
         res.status(500).json({ message: error.message || 'Failed to create leave request' });
@@ -112,10 +134,11 @@ export const deleteLeave = async (req, res) => {
 export const createPayroll = async (req, res) => {
     try {
         const { employee, month, year, grossSalary, deductions, pf = 0, esi = 0, professionalTax = 0 } = req.body;
+        const resolvedEmployee = await resolveEmployeeReference(employee);
         const netSalary = Number(grossSalary) - Number(deductions) - Number(pf) - Number(esi) - Number(professionalTax);
 
         const payroll = await Payroll.create({
-            employee,
+            employee: resolvedEmployee?._id || employee,
             month,
             year: Number(year),
             grossSalary: Number(grossSalary),

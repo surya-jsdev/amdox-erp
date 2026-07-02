@@ -23,7 +23,7 @@ function App() {
       <Route path='/purchase-orders' element={<PurchaseOrderPage />} />
       <Route path='/admin/users' element={<AdminUsers />} />
       <Route path='/hr-payroll' element={<Hrpayroll />} />
-      <Route path='/Profile' element={<Profile />} />
+      <Route path='/profile' element={<Profile />} />
     </Routes>
   );
 }

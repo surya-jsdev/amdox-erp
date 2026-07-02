@@ -41,9 +41,28 @@ function Login() {
       return;
     }
 
+    const getApiUrl = (path: string) => {
+      const envUrl = import.meta.env.VITE_API_URL?.trim() || '';
+      const currentOrigin = typeof window !== 'undefined' ? window.location.origin : '';
+
+      if (!envUrl) {
+        return path;
+      }
+
+      try {
+        const envOrigin = new URL(envUrl).origin;
+        if (envOrigin === currentOrigin) {
+          return path;
+        }
+        return `${envUrl.replace(/\/$/, '')}${path}`;
+      } catch {
+        return path;
+      }
+    };
+
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/auth/login`,
+        getApiUrl('/api/auth/login'),
         {
           method: "POST",
           headers: {
@@ -53,10 +72,18 @@ function Login() {
         }
       );
 
-      const data = await response.json();
+      const contentType = response.headers.get('content-type') || '';
+      const data = contentType.includes('application/json')
+        ? await response.json()
+        : { message: await response.text() };
 
       if (!response.ok) {
-        setFormData({ ...formData, error: data.message });
+        setFormData({ ...formData, error: data.message || 'Login failed' });
+        return;
+      }
+
+      if (!contentType.includes('application/json')) {
+        setFormData({ ...formData, error: 'Unexpected response format from server.' });
         return;
       }
 
@@ -65,6 +92,7 @@ function Login() {
 
       // Store user data in localStorage
       localStorage.setItem('user', JSON.stringify(data.user));
+      localStorage.setItem('isLoggedIn', 'true');
 
       // Clear form
       setFormData({ email: '', password: '', error: '' });
