@@ -305,7 +305,7 @@ function Inventory() {
                     </div>
 
                     <div className="mt-8 grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
-                        <div className="rounded-3xl border border-slate-200 bg-slate-50 p-6">
+                        <div className="rounded-3xl border border-slate-200 bg-slate-50 p-6 sm:flex-col">
                             <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                                 <div>
                                     <p className="text-lg font-semibold text-slate-900">Inventory management</p>
@@ -419,54 +419,98 @@ function Inventory() {
                             ) : filteredItems.length === 0 ? (
                                 <div className="rounded-3xl border border-slate-200 bg-slate-50 p-8 text-center text-sm text-slate-600">No inventory items found. Adjust your filters or add a new item.</div>
                             ) : (
-                                <div className="overflow-x-auto">
-                                    <table className="min-w-full divide-y divide-slate-200 text-left text-sm">
-                                        <thead className="bg-slate-50 text-slate-600">
-                                            <tr>
-                                                <th className="px-4 py-3 font-medium">Item</th>
-                                                <th className="px-4 py-3 font-medium">SKU</th>
-                                                <th className="px-4 py-3 font-medium">Qty</th>
-                                                <th className="px-4 py-3 font-medium">Reorder</th>
-                                                <th className="px-4 py-3 font-medium">Status</th>
-                                                <th className="px-4 py-3 font-medium">Supplier</th>
-                                                <th className="px-4 py-3 font-medium">Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody className="divide-y divide-slate-200">
-                                            {filteredItems.map((item) => (
-                                                <tr key={item._id} className="bg-white">
-                                                    <td className="px-4 py-4 text-slate-900">
-                                                        <div className="font-semibold">{item.itemName}</div>
-                                                        <div className="text-xs text-slate-500">{item.category}</div>
-                                                    </td>
-                                                    <td className="px-4 py-4 text-slate-600">{item.sku}</td>
-                                                    <td className="px-4 py-4 text-slate-900">{item.quantity}</td>
-                                                    <td className="px-4 py-4 text-slate-900">{item.reorderLevel}</td>
-                                                    <td className="px-4 py-4">
+                                <>
+                                    {/* Table for medium+ screens */}
+                                    <div className="hidden md:block overflow-x-auto">
+                                        <table className="min-w-full divide-y divide-slate-200 text-left text-sm">
+                                            <thead className="bg-slate-50 text-slate-600">
+                                                <tr>
+                                                    <th className="px-4 py-3 font-medium">Item</th>
+                                                    <th className="px-4 py-3 font-medium">SKU</th>
+                                                    <th className="px-4 py-3 font-medium">Qty</th>
+                                                    <th className="px-4 py-3 font-medium">Reorder</th>
+                                                    <th className="px-4 py-3 font-medium">Status</th>
+                                                    <th className="px-4 py-3 font-medium">Supplier</th>
+                                                    <th className="px-4 py-3 font-medium">Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody className="divide-y divide-slate-200">
+                                                {filteredItems.map((item) => (
+                                                    <tr key={item._id} className="bg-white">
+                                                        <td className="px-4 py-4 text-slate-900">
+                                                            <div className="font-semibold">{item.itemName}</div>
+                                                            <div className="text-xs text-slate-500">{item.category}</div>
+                                                        </td>
+                                                        <td className="px-4 py-4 text-slate-600">{item.sku}</td>
+                                                        <td className="px-4 py-4 text-slate-900">{item.quantity}</td>
+                                                        <td className="px-4 py-4 text-slate-900">{item.reorderLevel}</td>
+                                                        <td className="px-4 py-4">
+                                                            <span className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${item.status === 'In Stock' ? 'bg-emerald-100 text-emerald-700' : item.status === 'Low Stock' ? 'bg-amber-100 text-amber-700' : 'bg-rose-100 text-rose-700'}`}>
+                                                                {item.status}
+                                                            </span>
+                                                        </td>
+                                                        <td className="px-4 py-4 text-slate-600">{item.supplier?.name || '-'}</td>
+                                                        <td className="px-4 py-4 text-slate-600">
+                                                            {isAuthorized ? (
+                                                                <div className="flex gap-2">
+                                                                    <button type="button" onClick={() => handleEdit(item)} className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 transition hover:bg-slate-100">
+                                                                        <Pencil size={16} />
+                                                                    </button>
+                                                                    <button type="button" onClick={() => handleDelete(item._id)} className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-rose-200 bg-white text-rose-600 transition hover:bg-rose-50">
+                                                                        <Trash2 size={16} />
+                                                                    </button>
+                                                                </div>
+                                                            ) : (
+                                                                <span className="text-sm text-slate-400">View only</span>
+                                                            )}
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    {/* Card list for small screens */}
+                                    <div className="md:hidden space-y-3">
+                                        {filteredItems.map((item) => (
+                                            <div key={item._id} className="rounded-2xl border border-slate-200 bg-white p-4">
+                                                <div className="flex items-start justify-between">
+                                                    <div>
+                                                        <div className="font-semibold text-slate-900">{item.itemName}</div>
+                                                        <div className="text-xs text-slate-500">SKU: {item.sku}</div>
+                                                        <div className="mt-2 text-sm text-slate-600">{item.category} • {item.location || 'No location'}</div>
+                                                    </div>
+                                                    <div className="text-right">
+                                                        <div className="text-sm font-semibold text-slate-900">{item.quantity}</div>
+                                                        <div className="text-xs text-slate-500">Reorder: {item.reorderLevel}</div>
+                                                    </div>
+                                                </div>
+                                                <div className="mt-3 flex items-center justify-between">
+                                                    <div>
                                                         <span className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${item.status === 'In Stock' ? 'bg-emerald-100 text-emerald-700' : item.status === 'Low Stock' ? 'bg-amber-100 text-amber-700' : 'bg-rose-100 text-rose-700'}`}>
                                                             {item.status}
                                                         </span>
-                                                    </td>
-                                                    <td className="px-4 py-4 text-slate-600">{item.supplier?.name || '-'}</td>
-                                                    <td className="px-4 py-4 text-slate-600">
+                                                        <div className="mt-2 text-sm text-slate-600">Supplier: {item.supplier?.name || '-'}</div>
+                                                    </div>
+                                                    <div className="flex items-center gap-2">
                                                         {isAuthorized ? (
-                                                            <div className="flex gap-2">
-                                                                <button type="button" onClick={() => handleEdit(item)} className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 transition hover:bg-slate-100">
-                                                                    <Pencil size={16} />
+                                                            <>
+                                                                <button type="button" onClick={() => handleEdit(item)} className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 transition hover:bg-slate-100">
+                                                                    <Pencil size={14} />
                                                                 </button>
-                                                                <button type="button" onClick={() => handleDelete(item._id)} className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-rose-200 bg-white text-rose-600 transition hover:bg-rose-50">
-                                                                    <Trash2 size={16} />
+                                                                <button type="button" onClick={() => handleDelete(item._id)} className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-rose-200 bg-white text-rose-600 transition hover:bg-rose-50">
+                                                                    <Trash2 size={14} />
                                                                 </button>
-                                                            </div>
+                                                            </>
                                                         ) : (
                                                             <span className="text-sm text-slate-400">View only</span>
                                                         )}
-                                                    </td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </>
                             )}
                         </div>
                     </div>
