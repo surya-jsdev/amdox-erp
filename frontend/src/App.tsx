@@ -7,6 +7,7 @@ import AdminUsers from './pages/AdminUsers';
 import Hrpayroll from './pages/Hr/Hrpayroll.js';
 import Supplychain from './pages/Supplychain/Supplychain.js';
 import PurchaseOrderPage from './pages/Supplychain/PurchaseOrder';
+import Inventory from './pages/Supplychain/Inventory.js';
 import Profile from './pages/Profile/Profile.js';
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
       <Route path='/Dashboard' element={<Dashboard />} />
       <Route path='/finance-ledger' element={<FinanceLedger />} />
       <Route path='/vendors' element={<Supplychain />} />
+      <Route path='/inventory' element={<Inventory />} />
       <Route path='/purchase-orders' element={<PurchaseOrderPage />} />
       <Route path='/admin/users' element={<AdminUsers />} />
       <Route path='/hr-payroll' element={<Hrpayroll />} />

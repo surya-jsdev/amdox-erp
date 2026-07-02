@@ -9,6 +9,7 @@ import adminRoutes from './routes/adminRoutes.js';
 import hrRoutes from './routes/hrRoutes.js';
 import supplyRoutes from './routes/supplyRoutes.js';
 import purchaseOrderRoutes from './routes/purchaseOrderRoutes.js';
+import inventoryRoutes from './routes/inventoryRoutes.js';
 import profileRoutes from './routes/profileRoutes.js';
 import Ledger from './models/Ledger.js';
 
@@ -29,6 +30,7 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/hr', hrRoutes);
 app.use('/api/supply', supplyRoutes);
 app.use('/api/purchase-orders', purchaseOrderRoutes);
+app.use('/api/inventory', inventoryRoutes);
 
 app.get('/', (req, res) => {
     res.send('server Running Successfully')
