@@ -498,7 +498,7 @@ function ProjectPage() {
         totalBudget: projects.reduce((s, p) => s + p.budget, 0),
     };
 
-    const pieData = (overview?.statusDistribution || [])
+    const pieData = (overview?.statusDistribution || []) 
         .filter((s) => s.count > 0)
         .map((s) => ({ name: s.status, value: s.count }));
 
