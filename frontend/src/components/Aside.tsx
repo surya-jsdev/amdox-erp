@@ -96,9 +96,14 @@ function Aside() {
             location.pathname.startsWith("/vendors") ||
             location.pathname.startsWith("/purchase-orders") ||
             location.pathname.startsWith("/inventory") ||
-            location.pathname.startsWith("/forecasting")
+            location.pathname.startsWith("/forecasting") ||
+            location.pathname.startsWith("/projects")
         ) {
-            setOpenDropdown("Supply Chain");
+            if (location.pathname.startsWith("/projects")) {
+                setOpenDropdown(null);
+            } else {
+                setOpenDropdown("Supply Chain");
+            }
         }
     }, [location.pathname]);
 

@@ -9,20 +9,23 @@ import Supplychain from './pages/Supplychain/Supplychain.js';
 import PurchaseOrderPage from './pages/Supplychain/PurchaseOrder';
 import Inventory from './pages/Supplychain/Inventory.js';
 import Profile from './pages/Profile/Profile.js';
+import ProjectPage from './pages/Project/Project.js';
 
 function App() {
   const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
   // const navigate=useNavigate();
   return (
     <Routes>
-      <Route path="/" element={isLoggedIn ? <Navigate to="/dashboard" /> : <Login />} />
+      <Route path="/" element={isLoggedIn ? <Navigate to="/Dashboard" /> : <Login />} />
       <Route path="/Login" element={<Login />} />
       <Route path="/registration" element={<Registration />} />
       <Route path='/Dashboard' element={<Dashboard />} />
+      <Route path='/dashboard' element={<Navigate to="/Dashboard" replace />} />
       <Route path='/finance-ledger' element={<FinanceLedger />} />
       <Route path='/vendors' element={<Supplychain />} />
       <Route path='/inventory' element={<Inventory />} />
       <Route path='/purchase-orders' element={<PurchaseOrderPage />} />
+      <Route path='/projects' element={<ProjectPage />} />
       <Route path='/admin/users' element={<AdminUsers />} />
       <Route path='/hr-payroll' element={<Hrpayroll />} />
       <Route path='/profile' element={<Profile />} />
