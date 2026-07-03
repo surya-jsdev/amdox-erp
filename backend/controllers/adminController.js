@@ -1,6 +1,5 @@
 import User from '../models/User.js';
 
-
 export const getUsers = async (req, res) => {
     try {
         const users = await User.find().select('-password').sort({ createdAt: -1 });
@@ -34,16 +33,6 @@ export const createUser = async (req, res) => {
             role: role || 'Employee',
         });
 
-        // Emit employee update event for dashboard
-        const totalEmployees = await User.countDocuments();
-        eventEmitter.emitEmployeeUpdate({
-            action: 'create',
-            totalEmployees,
-            user: newUser,
-            timestamp: new Date(),
-        });
-        eventEmitter.emitDashboardUpdate({ event: 'employee_created', data: { totalEmployees } });
-
         res.status(201).json({ message: 'User created successfully', user: newUser });
     } catch (error) {
         res.status(500).json({ message: error.message || 'Failed to create user' });
@@ -70,15 +59,6 @@ export const updateUser = async (req, res) => {
         const updatedUser = await user.save();
         const result = updatedUser.toObject();
         delete result.password;
-
-        // Emit employee update event for dashboard
-        eventEmitter.emitEmployeeUpdate({
-            action: 'update',
-            user: result,
-            timestamp: new Date(),
-        });
-        eventEmitter.emitDashboardUpdate({ event: 'employee_updated', data: result });
-
         res.json({ message: 'User updated successfully', user: result });
     } catch (error) {
         res.status(500).json({ message: error.message || 'Failed to update user' });
@@ -89,17 +69,6 @@ export const deleteUser = async (req, res) => {
     try {
         const deleted = await User.findByIdAndDelete(req.params.id);
         if (!deleted) return res.status(404).json({ message: 'User not found' });
-
-        // Emit employee update event for dashboard
-        const totalEmployees = await User.countDocuments();
-        eventEmitter.emitEmployeeUpdate({
-            action: 'delete',
-            totalEmployees,
-            deletedUserId: req.params.id,
-            timestamp: new Date(),
-        });
-        eventEmitter.emitDashboardUpdate({ event: 'employee_deleted', data: { totalEmployees } });
-
         res.json({ message: 'User deleted successfully' });
     } catch (error) {
         res.status(500).json({ message: error.message || 'Failed to delete user' });

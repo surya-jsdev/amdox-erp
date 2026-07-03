@@ -1,4 +1,4 @@
-import PurchaseOrder from '../models/PurchaseOrder.js';
+import PurchaseOrder from '../models/purchaseorder.js';
 import Vendor from '../models/Vendor.js';
 
 const generatePoNumber = async () => {
