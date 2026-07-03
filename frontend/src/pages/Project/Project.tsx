@@ -678,7 +678,7 @@ function ProjectPage() {
                             {activeTab === 'overview' && (
                                 <div className="grid gap-6 xl:grid-cols-[1fr_320px]">
                                     <div>
-                                        <div className="mb-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
+                                        <div className="mb-6 grid gap-4 sm:grid-cols-2  xl:grid-cols-5 w-xs">
                                             <div className="rounded-3xl border border-slate-200 bg-slate-50 p-4">
                                                 <p className="text-sm font-medium text-slate-500">Total Projects</p>
                                                 <p className="mt-2 text-3xl font-semibold text-slate-900">{summary.total}</p>
@@ -707,8 +707,8 @@ function ProjectPage() {
                                             </div>
                                         </div>
 
-                                        <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-                                            <div className="relative flex-1 sm:min-w-[200px]">
+                                        <div className="mb-4 flex flex-col gap-3 sm:flex-row w-xs sm:flex-wrap">
+                                            <div className="relative flex-1 sm:min-w-50">
                                                 <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
                                                 <input
                                                     type="search"
@@ -756,7 +756,7 @@ function ProjectPage() {
                                     </div>
 
                                     <div className="space-y-4">
-                                        <div className="rounded-3xl border border-slate-200 bg-slate-50 p-4">
+                                        <div className="rounded-3xl border border-slate-200 bg-slate-50 p-4 bg">
                                             <h3 className="mb-4 text-sm font-semibold text-slate-900">Projects by Status</h3>
                                             {pieData.length > 0 ? (
                                                 <ResponsiveContainer width="100%" height={180}>
