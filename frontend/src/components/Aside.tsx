@@ -63,7 +63,7 @@ const baseMenuItems: MenuItem[] = [
         ]
     },
     { name: 'Projects', path: '/projects', icon: Briefcase },
-    { name: 'Business Intelligence', path: '/reports', icon: BarChart3 },
+    { name: 'Business Intelligence', path: '/business-intelligence', icon: BarChart3 },
     { name: 'AI Forecasting', path: '/tasks', icon: LucideTimer },
     { name: 'Settings', path: '/settings', icon: Settings },
     { name: 'Logout', path: '/logout', icon: LogOut }
@@ -119,7 +119,6 @@ function Aside() {
     return (
         <>
             {/* Mobile Button */}
-
             <button
                 onClick={() => setIsOpen(!isOpen)}
                 className="fixed top-4 left-4 z-50 rounded-lg bg-white p-2 shadow lg:hidden"

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Aside from '../components/Aside.js';
+import Aside from '../../components/Aside.js';
 
 interface UserItem {
     _id: string;

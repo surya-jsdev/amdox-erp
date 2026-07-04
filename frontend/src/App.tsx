@@ -3,7 +3,7 @@ import Login from './pages/Auth/Login.js';
 import Registration from './pages/Auth/Registration.js';
 import Dashboard from './pages/Dashboard/Dashboard.js';
 import FinanceLedger from './pages/Finance/FinanceLedger.js';
-import AdminUsers from './pages/AdminUsers';
+import AdminUsers from './pages/Admin/AdminUsers.js';
 import Hrpayroll from './pages/Hr/Hrpayroll.js';
 import Supplychain from './pages/Supplychain/Supplychain.js';
 import PurchaseOrderPage from './pages/Supplychain/PurchaseOrder';
