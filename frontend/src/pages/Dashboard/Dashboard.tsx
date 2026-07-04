@@ -16,8 +16,6 @@ import {
 } from 'recharts';
 import Aside from '../../components/Aside.js';
 
-
-
 const fallbackData = {
   summary: [
     {
