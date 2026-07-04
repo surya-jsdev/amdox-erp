@@ -498,7 +498,7 @@ function ProjectPage() {
         totalBudget: projects.reduce((s, p) => s + p.budget, 0),
     };
 
-    const pieData = (overview?.statusDistribution || []) 
+    const pieData = (overview?.statusDistribution || [])
         .filter((s) => s.count > 0)
         .map((s) => ({ name: s.status, value: s.count }));
 
@@ -517,74 +517,144 @@ function ProjectPage() {
     };
 
     const renderProjectTable = (rows: ProjectItem[], showActions = true) => (
-        <div className="overflow-x-auto rounded-3xl border border-slate-200 bg-slate-50 p-4 shadow-sm">
-            <table className="min-w-full text-left text-sm text-slate-700">
-                <thead>
-                    <tr className="border-b border-slate-200 text-slate-900">
-                        <th className="px-4 py-3">Project</th>
-                        <th className="px-4 py-3">Client</th>
-                        <th className="px-4 py-3">Manager</th>
-                        <th className="px-4 py-3">Progress</th>
-                        <th className="px-4 py-3">Dates</th>
-                        <th className="px-4 py-3">Status</th>
-                        <th className="px-4 py-3">Budget</th>
-                        {showActions && canManage && <th className="px-4 py-3">Actions</th>}
-                    </tr>
-                </thead>
-                <tbody>
-                    {rows.length === 0 ? (
-                        <tr>
-                            <td colSpan={showActions && canManage ? 8 : 7} className="px-4 py-8 text-center text-slate-500">
-                                No projects found
-                            </td>
+        <div>
+            {/* Desktop Table View */}
+            <div className="hidden md:block overflow-x-auto rounded-3xl border border-slate-200 bg-slate-50 p-4 shadow-sm">
+                <table className="min-w-full text-left text-sm text-slate-700">
+                    <thead>
+                        <tr className="border-b border-slate-200 text-slate-900">
+                            <th className="px-4 py-3">Project</th>
+                            <th className="px-4 py-3">Client</th>
+                            <th className="px-4 py-3">Manager</th>
+                            <th className="px-4 py-3">Progress</th>
+                            <th className="px-4 py-3">Dates</th>
+                            <th className="px-4 py-3">Status</th>
+                            <th className="px-4 py-3">Budget</th>
+                            {showActions && canManage && <th className="px-4 py-3">Actions</th>}
                         </tr>
-                    ) : (
-                        rows.map((project) => (
-                            <tr key={project._id} className="border-b border-slate-200 bg-white">
-                                <td className="px-4 py-3">
-                                    <p className="font-medium text-slate-900">{project.name}</p>
-                                    <p className="text-xs text-slate-500">{project.code}</p>
+                    </thead>
+                    <tbody>
+                        {rows.length === 0 ? (
+                            <tr>
+                                <td colSpan={showActions && canManage ? 8 : 7} className="px-4 py-8 text-center text-slate-500">
+                                    No projects found
                                 </td>
-                                <td className="px-4 py-3">{project.client?.name || '-'}</td>
-                                <td className="px-4 py-3">{project.manager?.name || '-'}</td>
-                                <td className="px-4 py-3">{renderProgressBar(project.progressPercentage || 0)}</td>
-                                <td className="px-4 py-3 text-xs">
-                                    <p>{formatDate(project.startDate)}</p>
-                                    <p className="text-slate-500">{formatDate(project.endDate)}</p>
-                                </td>
-                                <td className="px-4 py-3">
-                                    <span className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${statusBadge(project.status)}`}>
-                                        {project.status}
-                                    </span>
-                                </td>
-                                <td className="px-4 py-3 font-medium">{formatCurrency(project.budget)}</td>
-                                {showActions && canManage && (
+                            </tr>
+                        ) : (
+                            rows.map((project) => (
+                                <tr key={project._id} className="border-b border-slate-200 bg-white">
                                     <td className="px-4 py-3">
-                                        <div className="flex gap-2">
-                                            <button
-                                                type="button"
-                                                onClick={() => handleEditProject(project)}
-                                                className="rounded-xl bg-slate-100 p-2 text-slate-600 hover:bg-slate-200"
-                                            >
-                                                <Pencil size={14} />
-                                            </button>
-                                            {canDelete && (
+                                        <p className="font-medium text-slate-900">{project.name}</p>
+                                        <p className="text-xs text-slate-500">{project.code}</p>
+                                    </td>
+                                    <td className="px-4 py-3">{project.client?.name || '-'}</td>
+                                    <td className="px-4 py-3">{project.manager?.name || '-'}</td>
+                                    <td className="px-4 py-3">{renderProgressBar(project.progressPercentage || 0)}</td>
+                                    <td className="px-4 py-3 text-xs">
+                                        <p>{formatDate(project.startDate)}</p>
+                                        <p className="text-slate-500">{formatDate(project.endDate)}</p>
+                                    </td>
+                                    <td className="px-4 py-3">
+                                        <span className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${statusBadge(project.status)}`}>
+                                            {project.status}
+                                        </span>
+                                    </td>
+                                    <td className="px-4 py-3 font-medium">{formatCurrency(project.budget)}</td>
+                                    {showActions && canManage && (
+                                        <td className="px-4 py-3">
+                                            <div className="flex gap-2">
                                                 <button
                                                     type="button"
-                                                    onClick={() => handleDeleteProject(project._id)}
-                                                    className="rounded-xl bg-rose-50 p-2 text-rose-600 hover:bg-rose-100"
+                                                    onClick={() => handleEditProject(project)}
+                                                    className="rounded-xl bg-slate-100 p-2 text-slate-600 hover:bg-slate-200"
                                                 >
-                                                    <Trash2 size={14} />
+                                                    <Pencil size={14} />
                                                 </button>
-                                            )}
-                                        </div>
-                                    </td>
-                                )}
-                            </tr>
-                        ))
-                    )}
-                </tbody>
-            </table>
+                                                {canDelete && (
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => handleDeleteProject(project._id)}
+                                                        className="rounded-xl bg-rose-50 p-2 text-rose-600 hover:bg-rose-100"
+                                                    >
+                                                        <Trash2 size={14} />
+                                                    </button>
+                                                )}
+                                            </div>
+                                        </td>
+                                    )}
+                                </tr>
+                            ))
+                        )}
+                    </tbody>
+                </table>
+            </div>
+
+            {/* Mobile Card View */}
+            <div className="md:hidden space-y-4">
+                {rows.length === 0 ? (
+                    <div className="rounded-3xl border border-slate-200 bg-slate-50 p-6 text-center text-slate-500">
+                        No projects found
+                    </div>
+                ) : (
+                    rows.map((project) => (
+                        <div key={project._id} className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm space-y-3">
+                            <div className="flex justify-between items-start gap-2">
+                                <div>
+                                    <p className="font-semibold text-slate-900">{project.name}</p>
+                                    <p className="text-xs text-slate-500">{project.code}</p>
+                                </div>
+                                <span className={`inline-flex rounded-full px-2.5 py-1 text-xs font-semibold shrink-0 ${statusBadge(project.status)}`}>
+                                    {project.status}
+                                </span>
+                            </div>
+                            <div className="grid grid-cols-2 gap-2 text-xs text-slate-600">
+                                <div>
+                                    <p className="text-[10px] uppercase tracking-wider text-slate-400 font-medium">Client</p>
+                                    <p className="text-slate-800 font-medium">{project.client?.name || '-'}</p>
+                                </div>
+                                <div>
+                                    <p className="text-[10px] uppercase tracking-wider text-slate-400 font-medium">Manager</p>
+                                    <p className="text-slate-800 font-medium">{project.manager?.name || '-'}</p>
+                                </div>
+                            </div>
+                            <div className="space-y-1">
+                                <p className="text-[10px] uppercase tracking-wider text-slate-400 font-medium">Progress</p>
+                                {renderProgressBar(project.progressPercentage || 0)}
+                            </div>
+                            <div className="flex justify-between items-center pt-2 border-t border-slate-100 text-xs">
+                                <div>
+                                    <p className="text-[10px] uppercase tracking-wider text-slate-400 font-medium">Budget</p>
+                                    <p className="font-semibold text-slate-900">{formatCurrency(project.budget)}</p>
+                                </div>
+                                <div className="text-right">
+                                    <p className="text-[10px] uppercase tracking-wider text-slate-400 font-medium">Dates</p>
+                                    <p className="text-slate-800">{formatDate(project.startDate)} - {formatDate(project.endDate)}</p>
+                                </div>
+                            </div>
+                            {showActions && canManage && (
+                                <div className="flex justify-end gap-2 pt-2 border-t border-slate-100">
+                                    <button
+                                        type="button"
+                                        onClick={() => handleEditProject(project)}
+                                        className="inline-flex items-center gap-1 rounded-xl bg-slate-100 px-3 py-2 text-xs font-medium text-slate-600 hover:bg-slate-200"
+                                    >
+                                        <Pencil size={12} /> Edit
+                                    </button>
+                                    {canDelete && (
+                                        <button
+                                            type="button"
+                                            onClick={() => handleDeleteProject(project._id)}
+                                            className="inline-flex items-center gap-1 rounded-xl bg-rose-50 px-3 py-2 text-xs font-medium text-rose-600 hover:bg-rose-100"
+                                        >
+                                            <Trash2 size={12} /> Delete
+                                        </button>
+                                    )}
+                                </div>
+                            )}
+                        </div>
+                    ))
+                )}
+            </div>
         </div>
     );
 
@@ -653,11 +723,10 @@ function ProjectPage() {
                                 key={id}
                                 type="button"
                                 onClick={() => setActiveTab(id)}
-                                className={`inline-flex items-center gap-2 rounded-t-2xl px-4 py-2.5 text-sm font-medium transition ${
-                                    activeTab === id
-                                        ? 'border-b-2 border-violet-700 text-violet-700'
-                                        : 'text-slate-500 hover:text-slate-800'
-                                }`}
+                                className={`inline-flex items-center gap-2 rounded-t-2xl px-4 py-2.5 text-sm font-medium transition ${activeTab === id
+                                    ? 'border-b-2 border-violet-700 text-violet-700'
+                                    : 'text-slate-500 hover:text-slate-800'
+                                    }`}
                             >
                                 <Icon size={16} />
                                 {label}
@@ -678,7 +747,7 @@ function ProjectPage() {
                             {activeTab === 'overview' && (
                                 <div className="grid gap-6 xl:grid-cols-[1fr_320px]">
                                     <div>
-                                        <div className="mb-6 grid gap-4 sm:grid-cols-2  xl:grid-cols-5 w-xs">
+                                        <div className="mb-6 grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 w-full">
                                             <div className="rounded-3xl border border-slate-200 bg-slate-50 p-4">
                                                 <p className="text-sm font-medium text-slate-500">Total Projects</p>
                                                 <p className="mt-2 text-3xl font-semibold text-slate-900">{summary.total}</p>
@@ -701,13 +770,13 @@ function ProjectPage() {
                                                 <p className="mt-2 text-3xl font-semibold text-amber-600">{summary.onHold}</p>
                                                 <p className="mt-1 text-xs text-slate-500">Not progressing</p>
                                             </div>
-                                            <div className="rounded-3xl border border-slate-200 bg-violet-50 p-4 sm:col-span-2 xl:col-span-1">
+                                            <div className="rounded-3xl border border-slate-200 bg-violet-50 p-4 sm:col-span-2 lg:col-span-1">
                                                 <p className="text-sm font-medium text-violet-600">Total Value</p>
                                                 <p className="mt-2 text-2xl font-semibold text-violet-900">{formatCurrency(summary.totalBudget)}</p>
                                             </div>
                                         </div>
 
-                                        <div className="mb-4 flex flex-col gap-3 sm:flex-row w-xs sm:flex-wrap">
+                                        <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:flex-wrap w-full">
                                             <div className="relative flex-1 sm:min-w-50">
                                                 <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
                                                 <input
@@ -755,7 +824,7 @@ function ProjectPage() {
                                         {renderProjectTable(filteredProjects, false)}
                                     </div>
 
-                                    <div className="space-y-4">
+                                    <div className="grid gap-4 md:grid-cols-3 xl:grid-cols-1">
                                         <div className="rounded-3xl border border-slate-200 bg-slate-50 p-4 bg">
                                             <h3 className="mb-4 text-sm font-semibold text-slate-900">Projects by Status</h3>
                                             {pieData.length > 0 ? (
@@ -953,7 +1022,7 @@ function ProjectPage() {
                                         </form>
                                     )}
 
-                                    <div className="mb-4 grid gap-4 md:grid-cols-4">
+                                    <div className="mb-4 grid gap-4 grid-cols-2 lg:grid-cols-4">
                                         <div className="rounded-3xl border border-slate-200 bg-slate-50 p-4">
                                             <p className="text-sm text-slate-500">Total</p>
                                             <p className="mt-2 text-2xl font-semibold">{projects.length}</p>
@@ -1092,7 +1161,7 @@ function ProjectPage() {
                                         </form>
                                     )}
 
-                                    <div className="mb-4 grid gap-4 md:grid-cols-5">
+                                    <div className="mb-4 grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-5">
                                         {(['total', 'todo', 'inProgress', 'done', 'blocked'] as const).map((key) => {
                                             const labels = { total: 'Total', todo: 'To Do', inProgress: 'In Progress', done: 'Done', blocked: 'Blocked' };
                                             const counts = {
@@ -1132,7 +1201,8 @@ function ProjectPage() {
                                         </select>
                                     </div>
 
-                                    <div className="overflow-x-auto rounded-3xl border border-slate-200 bg-slate-50 p-4 shadow-sm">
+                                    {/* Tasks Desktop Table View */}
+                                    <div className="hidden md:block overflow-x-auto rounded-3xl border border-slate-200 bg-slate-50 p-4 shadow-sm">
                                         <table className="min-w-full text-left text-sm text-slate-700">
                                             <thead>
                                                 <tr className="border-b border-slate-200 text-slate-900">
@@ -1187,6 +1257,61 @@ function ProjectPage() {
                                                 )}
                                             </tbody>
                                         </table>
+                                    </div>
+
+                                    {/* Tasks Mobile Card View */}
+                                    <div className="md:hidden space-y-4">
+                                        {filteredTasks.length === 0 ? (
+                                            <div className="rounded-3xl border border-slate-200 bg-slate-50 p-6 text-center text-slate-500">
+                                                No tasks found
+                                            </div>
+                                        ) : (
+                                            filteredTasks.map((task) => (
+                                                <div key={task._id} className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm space-y-3">
+                                                    <div className="flex justify-between items-start gap-2">
+                                                        <div>
+                                                            <p className="font-semibold text-slate-900">{task.title}</p>
+                                                            {task.description && <p className="text-xs text-slate-500 mt-0.5">{task.description}</p>}
+                                                        </div>
+                                                        <span className={`inline-flex rounded-full px-2.5 py-1 text-xs font-semibold shrink-0 ${statusBadge(task.status)}`}>
+                                                            {task.status}
+                                                        </span>
+                                                    </div>
+                                                    <div className="grid grid-cols-2 gap-2 text-xs text-slate-600">
+                                                        <div>
+                                                            <p className="text-[10px] uppercase tracking-wider text-slate-400 font-medium">Project</p>
+                                                            <p className="text-slate-800 font-medium">{task.project?.name || '-'}</p>
+                                                        </div>
+                                                        <div>
+                                                            <p className="text-[10px] uppercase tracking-wider text-slate-400 font-medium">Assigned To</p>
+                                                            <p className="text-slate-800 font-medium">{task.assignedTo?.name || 'Unassigned'}</p>
+                                                        </div>
+                                                    </div>
+                                                    <div className="flex justify-between items-center pt-2 border-t border-slate-100 text-xs">
+                                                        <div>
+                                                            <p className="text-[10px] uppercase tracking-wider text-slate-400 font-medium">Priority</p>
+                                                            <span className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-semibold ${priorityBadge(task.priority)}`}>
+                                                                {task.priority}
+                                                            </span>
+                                                        </div>
+                                                        <div className="text-right">
+                                                            <p className="text-[10px] uppercase tracking-wider text-slate-400 font-medium">Due Date</p>
+                                                            <p className="text-slate-800 font-semibold">{formatDate(task.dueDate || '')}</p>
+                                                        </div>
+                                                    </div>
+                                                    <div className="flex justify-end gap-2 pt-2 border-t border-slate-100">
+                                                        <button type="button" onClick={() => handleEditTask(task)} className="inline-flex items-center gap-1 rounded-xl bg-slate-100 px-3 py-2 text-xs font-medium text-slate-600 hover:bg-slate-200">
+                                                            <Pencil size={12} /> Edit
+                                                        </button>
+                                                        {canManage && (
+                                                            <button type="button" onClick={() => handleDeleteTask(task._id)} className="inline-flex items-center gap-1 rounded-xl bg-rose-50 px-3 py-2 text-xs font-medium text-rose-600 hover:bg-rose-100">
+                                                                <Trash2 size={12} /> Delete
+                                                            </button>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            ))
+                                        )}
                                     </div>
                                 </>
                             )}
@@ -1294,7 +1419,7 @@ function ProjectPage() {
                                         </form>
                                     )}
 
-                                    <div className="mb-4 grid gap-4 md:grid-cols-5">
+                                    <div className="mb-4 grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-5">
                                         {(['total', 'open', 'inProgress', 'resolved', 'critical'] as const).map((key) => {
                                             const labels = { total: 'Total', open: 'Open', inProgress: 'In Progress', resolved: 'Resolved', critical: 'Critical' };
                                             const counts = {
@@ -1334,7 +1459,8 @@ function ProjectPage() {
                                         </select>
                                     </div>
 
-                                    <div className="overflow-x-auto rounded-3xl border border-slate-200 bg-slate-50 p-4 shadow-sm">
+                                    {/* Issues Desktop Table View */}
+                                    <div className="hidden md:block overflow-x-auto rounded-3xl border border-slate-200 bg-slate-50 p-4 shadow-sm">
                                         <table className="min-w-full text-left text-sm text-slate-700">
                                             <thead>
                                                 <tr className="border-b border-slate-200 text-slate-900">
@@ -1389,6 +1515,61 @@ function ProjectPage() {
                                                 )}
                                             </tbody>
                                         </table>
+                                    </div>
+
+                                    {/* Issues Mobile Card View */}
+                                    <div className="md:hidden space-y-4">
+                                        {filteredIssues.length === 0 ? (
+                                            <div className="rounded-3xl border border-slate-200 bg-slate-50 p-6 text-center text-slate-500">
+                                                No issues found
+                                            </div>
+                                        ) : (
+                                            filteredIssues.map((issue) => (
+                                                <div key={issue._id} className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm space-y-3">
+                                                    <div className="flex justify-between items-start gap-2">
+                                                        <div>
+                                                            <p className="font-semibold text-slate-900">{issue.title}</p>
+                                                            {issue.description && <p className="text-xs text-slate-500 mt-0.5">{issue.description}</p>}
+                                                        </div>
+                                                        <span className={`inline-flex rounded-full px-2.5 py-1 text-xs font-semibold shrink-0 ${statusBadge(issue.status)}`}>
+                                                            {issue.status}
+                                                        </span>
+                                                    </div>
+                                                    <div className="grid grid-cols-2 gap-2 text-xs text-slate-600">
+                                                        <div>
+                                                            <p className="text-[10px] uppercase tracking-wider text-slate-400 font-medium">Project</p>
+                                                            <p className="text-slate-800 font-medium">{issue.project?.name || '-'}</p>
+                                                        </div>
+                                                        <div>
+                                                            <p className="text-[10px] uppercase tracking-wider text-slate-400 font-medium">Assigned To</p>
+                                                            <p className="text-slate-800 font-medium">{issue.assignedTo?.name || 'Unassigned'}</p>
+                                                        </div>
+                                                    </div>
+                                                    <div className="flex justify-between items-center pt-2 border-t border-slate-100 text-xs">
+                                                        <div>
+                                                            <p className="text-[10px] uppercase tracking-wider text-slate-400 font-medium">Priority</p>
+                                                            <span className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-semibold ${priorityBadge(issue.priority)}`}>
+                                                                {issue.priority}
+                                                            </span>
+                                                        </div>
+                                                        <div className="text-right">
+                                                            <p className="text-[10px] uppercase tracking-wider text-slate-400 font-medium">Reported By</p>
+                                                            <p className="text-slate-800 font-semibold">{issue.reportedBy?.name || '-'}</p>
+                                                        </div>
+                                                    </div>
+                                                    <div className="flex justify-end gap-2 pt-2 border-t border-slate-100">
+                                                        <button type="button" onClick={() => handleEditIssue(issue)} className="inline-flex items-center gap-1 rounded-xl bg-slate-100 px-3 py-2 text-xs font-medium text-slate-600 hover:bg-slate-200">
+                                                            <Pencil size={12} /> Edit
+                                                        </button>
+                                                        {canManage && (
+                                                            <button type="button" onClick={() => handleDeleteIssue(issue._id)} className="inline-flex items-center gap-1 rounded-xl bg-rose-50 px-3 py-2 text-xs font-medium text-rose-600 hover:bg-rose-100">
+                                                                <Trash2 size={12} /> Delete
+                                                            </button>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            ))
+                                        )}
                                     </div>
                                 </>
                             )}
