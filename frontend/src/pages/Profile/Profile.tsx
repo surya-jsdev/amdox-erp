@@ -363,7 +363,7 @@ const Profile = () => {
                 </div>
               </div>
             ) : (
-              <div className='rounded-4xl bg-white p-6 shadow-xl shadow-slate-200 sm:p-8'>
+              <div className='rounded-4xl bg-white p-6 shadow-xl shadow-slate-200 flex flex-col gap-4 sm:p-8'>
                 <div className='rounded-3xl border border-slate-200 bg-slate-50 p-5'>
                   <p className='text-xs uppercase tracking-[0.2em] text-slate-400'>Full Name</p>
                   <p className='mt-3 text-base font-medium text-slate-900'>{user.name}</p>
