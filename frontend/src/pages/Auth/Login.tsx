@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock } from "lucide-react";
@@ -21,6 +21,7 @@ function Login() {
     password: '',
     error: ''
   });
+  const [successMessage, setSuccessMessage] = useState('')
   // HandalingLogin Input
   const handlingdata = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -87,8 +88,9 @@ function Login() {
         return;
       }
 
-      console.log('Login successful:', data);
-      alert(data.message);
+      console.log('Login successful:');
+      setSuccessMessage(data.message || 'Login successful!');
+      // alert(data.message);
 
       // Store user data in localStorage
       localStorage.setItem('user', JSON.stringify(data.user));
@@ -98,7 +100,9 @@ function Login() {
       setFormData({ email: '', password: '', error: '' });
 
       // Redirect to dashboard
-      navigate('/Dashboard');
+      setTimeout(() => {
+        navigate('/Dashboard');
+      }, 1000);
     } catch (error) {
       console.error(error);
       setFormData({ ...formData, error: error instanceof Error ? error.message : 'Login failed', });
@@ -151,7 +155,7 @@ function Login() {
             </div>
 
             {formData.error && <p className='text-sm font-medium text-rose-600'>{formData.error}</p>}
-
+            {successMessage && <p className='text-lg text-center bg-green-300 rounded-2xl border-white font-medium text-white p-2'>{successMessage}</p>}
             <button type='submit' className='w-full rounded-3xl bg-blue-800 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-900'>
               Login
             </button>
