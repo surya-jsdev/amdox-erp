@@ -14,6 +14,8 @@ import profileRoutes from './routes/profileRoutes.js';
 import projectRoutes from './routes/projectRoutes.js';
 import taskRoutes from './routes/taskRoutes.js';
 import issueRoutes from './routes/issueRoutes.js';
+import biRoutes from './routes/biRoutes.js';
+import { seedBIData } from './controllers/biController.js';
 import Ledger from './models/Ledger.js';
 import Client from './models/Client.js';
 import Project from './models/Project.js';
@@ -42,6 +44,7 @@ app.use('/api/inventory', inventoryRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/tasks', taskRoutes);
 app.use('/api/issues', issueRoutes);
+app.use('/api/bi', biRoutes);
 
 app.get('/', (req, res) => {
     res.send('server Running Successfully')
@@ -162,6 +165,7 @@ const startServer = async () => {
     await connectDB();
     await seedLedger();
     await seedProjects();
+    await seedBIData();
     app.listen(PORT, () => {
         console.log(`Server Running on Port ${PORT}`);
     });

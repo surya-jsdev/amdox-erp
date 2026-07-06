@@ -10,6 +10,7 @@ import PurchaseOrderPage from './pages/Supplychain/PurchaseOrder';
 import Inventory from './pages/Supplychain/Inventory.js';
 import Profile from './pages/Profile/Profile.js';
 import ProjectPage from './pages/Project/Project.js';
+import BusinessIntelligence from './pages/BusinessIntelligence/BusinessIntelligence';
 
 function App() {
   const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
@@ -29,6 +30,7 @@ function App() {
       <Route path='/admin/users' element={<AdminUsers />} />
       <Route path='/hr-payroll' element={<Hrpayroll />} />
       <Route path='/profile' element={<Profile />} />
+      <Route path='/business-intelligence' element={<BusinessIntelligence />} />
     </Routes>
   );
 }
