@@ -105,9 +105,6 @@ Amdox ERP System is a modern Enterprise Resource Planning (ERP) web application 
 - MongoDB
 - Mongoose
 
-<!-- ## Authentication
-- JWT (JSON Web Token)
-- bcrypt -->
 
 ## Development Tools
 - Git

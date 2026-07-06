@@ -46,13 +46,13 @@ export const seedBIData = async () => {
         const statuses = ['Completed', 'Completed', 'Completed', 'Pending', 'Cancelled'];
 
         const salesRecords = [];
-        const baseDate = new Date('2025-06-01'); // 12-month span back and forward
-
+        const baseDate = new Date(); 
+        
         // Generate ~150 sales records over the last 12-14 months
         for (let i = 0; i < 150; i++) {
             const date = new Date(baseDate);
             date.setMonth(baseDate.getMonth() - Math.floor(i / 12));
-            date.setDate(1 + (i % 28)); // spread days
+            date.setDate(1 + (i % 28)); 
 
             const product = products[i % products.length];
             const unitsSold = Math.floor(Math.random() * 40) + 5;
@@ -127,7 +127,11 @@ export const getBIData = async (req, res) => {
         if (startDate || endDate) {
             matchStage.date = {};
             if (startDate) matchStage.date.$gte = new Date(startDate);
-            if (endDate) matchStage.date.$lte = new Date(endDate);
+            if (endDate) {
+                const end = new Date(endDate);
+                end.setHours(23, 59, 59, 999);
+                matchStage.date.$lte = end;
+            }
         }
 
         if (branch && branch !== 'All Branches') {
@@ -139,18 +143,15 @@ export const getBIData = async (req, res) => {
         }
 
         if (employee && employee !== 'All Employees') {
-            matchStage.$or = matchStage.$or || [];
-            matchStage.$or.push({ employeeName: employee });
+            matchStage.employeeName = employee;
         }
 
         if (project && project !== 'All Projects') {
-            matchStage.$or = matchStage.$or || [];
-            matchStage.$or.push({ projectName: project });
+            matchStage.projectName = project;
         }
 
         if (customer && customer !== 'All Customers') {
-            matchStage.$or = matchStage.$or || [];
-            matchStage.$or.push({ clientName: customer });
+            matchStage.clientName = customer;
         }
 
         if (productCategory && productCategory !== 'All Categories') {
@@ -159,11 +160,6 @@ export const getBIData = async (req, res) => {
 
         if (status && status !== 'All Status') {
             matchStage.status = status;
-        }
-
-        // Apply fallback if $or is empty array
-        if (matchStage.$or && matchStage.$or.length === 0) {
-            delete matchStage.$or;
         }
 
         // 1. Fetch filtered Sales Records

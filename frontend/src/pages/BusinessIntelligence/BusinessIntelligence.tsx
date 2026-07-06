@@ -85,8 +85,15 @@ export default function BusinessIntelligence() {
     const [biData, setBiData] = useState<any>(null);
 
     // Filters states
-    const [startDate, setStartDate] = useState('2024-05-01');
-    const [endDate, setEndDate] = useState('2024-05-31');
+    const getFormattedDate = (date: Date) => {
+        return date.toISOString().split('T')[0];
+    };
+    const initialEndDate = new Date();
+    const initialStartDate = new Date();
+    initialStartDate.setFullYear(initialEndDate.getFullYear() - 1);
+
+    const [startDate, setStartDate] = useState(getFormattedDate(initialStartDate));
+    const [endDate, setEndDate] = useState(getFormattedDate(initialEndDate));
     const [branch, setBranch] = useState('All Branches');
     const [department, setDepartment] = useState('All Departments');
     const [employee, setEmployee] = useState('All Employees');
@@ -211,6 +218,26 @@ export default function BusinessIntelligence() {
             }
 
             showToast(`${format} Report compiled successfully and added to Registry!`, 'success');
+            
+            // Trigger file download in browser
+            const headers = ['Metric', 'Value'];
+            const rows = [
+                ['Total Revenue', biData?.kpis?.totalRevenue || 1245000],
+                ['Total Orders', biData?.kpis?.totalOrders || 1248],
+                ['Total Profit', biData?.kpis?.totalProfit || 312000],
+                ['Total Customers', biData?.kpis?.totalCustomers || 845],
+                ['Inventory Value', biData?.kpis?.inventoryValue || 785000],
+            ];
+            const csvContent = "data:text/csv;charset=utf-8," 
+                + [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `${format === 'PDF' ? 'sales_report.csv' : 'financial_report.csv'}`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
             // Reload BI reports
             fetchBIData(false);
         } catch (err: any) {
@@ -236,7 +263,8 @@ export default function BusinessIntelligence() {
             {toastMessage && (
                 <div className={`fixed top-4 right-4 z-50 flex items-center gap-3 px-4 py-3 rounded-2xl shadow-xl transition-all duration-300 transform translate-y-0
                     ${toastMessage.type === 'success' ? 'bg-emerald-600 text-white' :
-                        toastMessage.type === 'info' ? 'bg-blue-600 text-white' : 'bg-rose-600 text-white'}`}
+                        toastMessage.type === 'info' ? 'bg-blue-600 text-white' :
+                        toastMessage.type === 'warning' ? 'bg-amber-500 text-white' : 'bg-rose-600 text-white'}`}
                 >
                     {toastMessage.type === 'success' && <CheckCircle2 size={18} />}
                     {toastMessage.type === 'warning' && <AlertTriangle size={18} />}
