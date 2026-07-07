@@ -145,9 +145,9 @@ export default function AiForecasting() {
             if (endDate) params.append('endDate', endDate);
 
             let apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-            if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-                apiUrl = 'http://localhost:5000';
-            }
+            // if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+            //     apiUrl = 'http://localhost:5000';
+            // }
             const response = await fetch(`${apiUrl}/api/forecast?${params.toString()}`);
             if (!response.ok) {
                 throw new Error('Failed to load forecast data from server.');
@@ -309,37 +309,72 @@ export default function AiForecasting() {
 
             <main className="flex-1 overflow-x-hidden">
                 {/* Header Navbar */}
-                <header className="bg-white border-b border-slate-100 px-6 py-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 ">
-                    <div className="flex items-center gap-3">
-                        <div className="lg:hidden w-10"></div>
-                        <div>
-                            <h1 className="text-2xl font-bold text-slate-900 leading-tight">AI Demand Forecasting</h1>
-                            <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest mt-0.5">Predict future demand and optimize inventory & supply chain</p>
+                <header className="bg-white border-b border-slate-100 px-6 py-4 flex flex-col md:flex-row justify-between items-stretch md:items-center gap-4">
+                    <div className="flex items-center justify-between w-full md:w-auto">
+                        <div className="flex items-center gap-3 pl-12 md:pl-0">
+                            <div>
+                                <h1 className="text-xl sm:text-2xl font-bold text-slate-900 leading-tight">AI Demand Forecasting</h1>
+                                <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest mt-0.5 hidden sm:block">Predict future demand and optimize inventory & supply chain</p>
+                                <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest mt-0.5 block sm:hidden">Predict demand & optimize inventory</p>
+                            </div>
+                        </div>
+
+                        {/* Notification / Profile Avatar for Mobile view */}
+                        <div className="flex items-center gap-3 md:hidden">
+                            <button className="relative p-1.5 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-lg transition">
+                                <Bell size={18} />
+                                <span className="absolute top-1 right-1 w-2 h-2 bg-blue-500 rounded-full"></span>
+                            </button>
+
+                            <div className="relative">
+                                <button
+                                    onClick={() => setShowProfileMenu(!showProfileMenu)}
+                                    className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-sm shadow cursor-pointer"
+                                >
+                                    {userName.charAt(0)}
+                                </button>
+
+                                {showProfileMenu && (
+                                    <div className="absolute right-0 mt-2 w-48 bg-white border border-slate-100 rounded-xl shadow-lg py-1 z-50">
+                                        <div className="px-4 py-2 border-b border-slate-100">
+                                            <p className="text-xs text-slate-400">Signed in as</p>
+                                            <p className="text-sm font-semibold text-slate-800 truncate">{userName}</p>
+                                        </div>
+                                        <button
+                                            onClick={() => { localStorage.clear(); window.location.href = '/Login'; }}
+                                            className="w-full text-left px-4 py-2 text-xs text-red-600 hover:bg-rose-50 font-medium transition"
+                                        >
+                                            Sign Out
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     </div>
 
-                    <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto justify-end">
-                        {/* Custom Date Range Picker */}
-                        <div className="flex items-center gap-2">
+                    <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3 w-full md:w-auto justify-end">
+                        {/* Custom Date Range Picker Container */}
+                        <div className="flex items-center justify-between gap-2 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl flex-1 sm:flex-initial">
+                            <Calendar size={14} className="text-slate-400 flex-shrink-0" />
                             <input
                                 type="date"
                                 value={startDate}
                                 onChange={(e) => setStartDate(e.target.value)}
-                                className="px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-700 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                className="bg-transparent border-none text-xs font-semibold text-slate-700 focus:outline-none w-28 cursor-pointer"
                                 placeholder="Start Date"
                             />
-                            <span className="text-slate-400 text-xs font-bold">to</span>
+                            <span className="text-slate-400 text-xs font-bold">-</span>
                             <input
                                 type="date"
                                 value={endDate}
                                 onChange={(e) => setEndDate(e.target.value)}
-                                className="px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-700 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                className="bg-transparent border-none text-xs font-semibold text-slate-700 focus:outline-none w-28 cursor-pointer"
                                 placeholder="End Date"
                             />
                             {(startDate || endDate) && (
                                 <button
                                     onClick={() => { setStartDate(''); setEndDate(''); }}
-                                    className="text-[10px] text-red-500 font-bold hover:underline"
+                                    className="text-[10px] text-red-500 font-bold hover:underline ml-1"
                                 >
                                     Clear
                                 </button>
@@ -347,11 +382,11 @@ export default function AiForecasting() {
                         </div>
 
                         {/* Top-Level Warehouse filter */}
-                        <div className="relative">
+                        <div className="relative flex-1 sm:flex-initial">
                             <select
                                 value={warehouse}
                                 onChange={(e) => setWarehouse(e.target.value)}
-                                className="appearance-none pr-8 pl-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition cursor-pointer"
+                                className="w-full appearance-none pr-8 pl-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm font-semibold text-slate-700 focus:outline-none focus:ring-1 focus:ring-blue-500 transition cursor-pointer"
                             >
                                 {filterOptions.warehouses.map(w => (
                                     <option key={w} value={w}>{w}</option>
@@ -363,14 +398,14 @@ export default function AiForecasting() {
                         {/* Export Button */}
                         <button
                             onClick={handleExportReport}
-                            className="flex items-center gap-1.5 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs sm:text-sm font-semibold shadow-sm transition duration-150 cursor-pointer"
+                            className="flex items-center justify-center gap-1.5 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs sm:text-sm font-semibold shadow-sm transition duration-150 cursor-pointer w-full sm:w-auto"
                         >
                             <FileDown size={15} />
                             <span>Export Report</span>
                         </button>
 
-                        {/* Notification / Profile Avatar */}
-                        <div className="flex items-center gap-3 border-l border-slate-200 pl-3">
+                        {/* Notification / Profile Avatar for Desktop view */}
+                        <div className="hidden md:flex items-center gap-3 border-l border-slate-200 pl-3">
                             <button className="relative p-2 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-lg transition">
                                 <Bell size={18} />
                                 <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-blue-500 rounded-full"></span>
@@ -384,7 +419,7 @@ export default function AiForecasting() {
                                     <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-sm shadow">
                                         {userName.charAt(0)}
                                     </div>
-                                    <div className="hidden md:block text-left">
+                                    <div className="hidden lg:block text-left">
                                         <p className="text-xs font-bold text-slate-800 leading-tight">{userName}</p>
                                         <p className="text-[10px] text-slate-400 font-semibold uppercase">{userRole}</p>
                                     </div>

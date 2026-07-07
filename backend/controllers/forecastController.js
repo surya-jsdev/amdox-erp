@@ -44,7 +44,6 @@ export const getForecastData = async (req, res) => {
 
         const horizonDays = parseInt(timeHorizon, 10) || 30;
 
-   
         const modelState = await getOrCreateModelState();
 
        
@@ -188,7 +187,7 @@ export const getForecastData = async (req, res) => {
             }))
         ];
 
-        // 5. Query Stock Levels from InventoryItem
+      
         const inventoryFilter = {};
         if (productCategory && productCategory !== 'All Categories') {
             inventoryFilter.category = productCategory;
@@ -199,13 +198,12 @@ export const getForecastData = async (req, res) => {
         
         const inventoryItems = await InventoryItem.find(inventoryFilter);
 
-        // Fetch all sales products list for top-level aggregates
+       
         const allProductsList = await BISalesRecord.distinct('productName');
         const allCategoriesList = await BISalesRecord.distinct('productCategory');
         const allBranchesList = await BISalesRecord.distinct('branch');
 
-        // Compile products to check for Stock risks
-        // For each product in the inventory, estimate its average forecasted daily demand
+
         const defaultAvgDailyDemand = avgDemand / (allProductsList.length || 5);
         const forecastTotalHorizon = forecastDataPoints.reduce((sum, p) => sum + p.units, 0);
         const forecastedAvgTotalDaily = forecastTotalHorizon / horizonDays;
@@ -214,7 +212,7 @@ export const getForecastData = async (req, res) => {
         let stockOutCount = 0;
         let overstockCount = 0;
 
-        // Define fallback products if DB inventory is empty to make sure page renders beautifully
+
         const itemsToProcess = inventoryItems.length > 0 ? inventoryItems : [
             { itemName: 'Wireless Mouse', category: 'Electronics', quantity: 180, reorderLevel: 250, location: 'Mumbai Branch', status: 'Low Stock' },
             { itemName: 'USB Cable', category: 'Electronics', quantity: 24, reorderLevel: 100, location: 'Bangalore Branch', status: 'Low Stock' },
