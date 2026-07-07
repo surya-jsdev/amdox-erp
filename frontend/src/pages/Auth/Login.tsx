@@ -21,6 +21,7 @@ function Login() {
     password: '',
     error: ''
   });
+  
   const [successMessage, setSuccessMessage] = useState('')
   // HandalingLogin Input
   const handlingdata = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -90,7 +91,6 @@ function Login() {
 
       console.log('Login successful:');
       setSuccessMessage(data.message || 'Login successful!');
-      // alert(data.message);
 
       // Store user data in localStorage
       localStorage.setItem('user', JSON.stringify(data.user));
@@ -103,6 +103,7 @@ function Login() {
       setTimeout(() => {
         navigate('/Dashboard');
       }, 1000);
+
     } catch (error) {
       console.error(error);
       setFormData({ ...formData, error: error instanceof Error ? error.message : 'Login failed', });
