@@ -214,11 +214,10 @@ export default function AiForecasting() {
 
     const handleExportReport = () => {
         showToast('Exporting AI forecasting report (PDF)...', 'success');
-        // Simple mock download
-        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({ kpis, chartData, modelState }, null, 2));
+        const dataStr = "data:text/plain;charset=utf-8," + encodeURIComponent(JSON.stringify({ kpis, chartData, modelState }, null, 2));
         const downloadAnchor = document.createElement('a');
         downloadAnchor.setAttribute("href", dataStr);
-        downloadAnchor.setAttribute("download", `AI_Forecast_Report_${timeHorizon}_Days.json`);
+        downloadAnchor.setAttribute("download", `AI_Forecast_Report_${timeHorizon}_Days.pdf`);
         document.body.appendChild(downloadAnchor);
         downloadAnchor.click();
         downloadAnchor.remove();

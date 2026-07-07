@@ -1,6 +1,6 @@
 import express from 'express';
 import { getLedgerEntries, createLedgerEntry, updateLedgerEntry, deleteLedgerEntry, getDashboardLedgerSummary } from '../controllers/ledgerController.js';
-import { checkManagerAccess } from '../middleware/checkManagerAccess.js';
+
 
 const router = express.Router();
 
@@ -12,7 +12,7 @@ const authorizeAdmin = (req, res, next) => {
     return res.status(403).json({ message: 'Admin access required' });
 };
 
-router.get('/', checkManagerAccess('financeLedger'), getLedgerEntries);
+router.get('/', authorizeAdmin, getLedgerEntries);
 router.post('/', authorizeAdmin, createLedgerEntry);
 router.put('/:id', authorizeAdmin, updateLedgerEntry);
 router.delete('/:id', authorizeAdmin, deleteLedgerEntry);
