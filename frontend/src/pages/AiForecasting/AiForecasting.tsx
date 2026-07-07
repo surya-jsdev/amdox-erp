@@ -363,7 +363,7 @@ export default function AiForecasting() {
                                 className="bg-transparent border-none text-xs font-semibold text-slate-700 focus:outline-none w-28 cursor-pointer"
                                 placeholder="Start Date"
                             />
-                            <span className="text-slate-400 text-xs font-bold">-</span>
+                            <span className="text-slate-400 text-xs font-bold ">-</span>
                             <input
                                 type="date"
                                 value={endDate}
@@ -952,7 +952,8 @@ export default function AiForecasting() {
                                 <button className="text-xs font-bold text-blue-600 hover:underline">View All Products &rarr;</button>
                             </div>
 
-                            <div className="overflow-x-auto">
+                            {/* Desktop Table View */}
+                            <div className="hidden md:block overflow-x-auto">
                                 <table className="w-full text-left border-collapse">
                                     <thead>
                                         <tr className="border-b border-slate-100 text-[10px] font-bold uppercase tracking-wider text-slate-400">
@@ -1000,6 +1001,51 @@ export default function AiForecasting() {
                                     </tbody>
                                 </table>
                             </div>
+
+                            {/* Mobile Card List View */}
+                            <div className="block md:hidden space-y-3">
+                                {loading ? (
+                                    <div className="py-8 text-center text-xs text-slate-400">Loading products...</div>
+                                ) : (
+                                    topProducts.map((p, idx) => (
+                                        <div key={idx} className="bg-slate-50 rounded-2xl p-4 border border-slate-100 flex flex-col gap-3 shadow-sm hover:shadow transition">
+                                            <div className="flex justify-between items-start">
+                                                <div>
+                                                    <h4 className="font-bold text-slate-900 text-sm">{p.product}</h4>
+                                                    <p className="text-slate-400 text-[10px] font-semibold mt-0.5">{p.category}</p>
+                                                </div>
+                                                <span className={`px-2 py-0.5 rounded-full text-[10px] font-extrabold ${p.changePercentage >= 0 ? 'bg-emerald-50 text-emerald-700 border border-emerald-100' : 'bg-rose-50 text-rose-700 border border-rose-100'}`}>
+                                                    {p.changePercentage >= 0 ? `+${p.changePercentage}%` : `${p.changePercentage}%`}
+                                                </span>
+                                            </div>
+                                            
+                                            <div className="flex justify-between items-center text-xs font-bold text-slate-600 border-t border-slate-100 pt-2.5">
+                                                <div>
+                                                    <p className="text-slate-400 text-[9px] uppercase tracking-wider">Actual (30d)</p>
+                                                    <p className="text-slate-800 font-extrabold mt-0.5">{formatIndianNumber(p.actualDemand30)}</p>
+                                                </div>
+                                                <div>
+                                                    <p className="text-slate-400 text-[9px] uppercase tracking-wider">Forecast (30d)</p>
+                                                    <p className="text-indigo-600 font-black mt-0.5">{formatIndianNumber(p.forecastedDemand30)}</p>
+                                                </div>
+                                                <div className="w-14 h-6">
+                                                    <ResponsiveContainer width="100%" height="100%">
+                                                        <LineChart data={p.trend.map((val, i) => ({ value: val }))}>
+                                                            <Line
+                                                                type="monotone"
+                                                                dataKey="value"
+                                                                stroke={p.changePercentage >= 0 ? '#10b981' : '#ef4444'}
+                                                                strokeWidth={1.5}
+                                                                dot={false}
+                                                            />
+                                                        </LineChart>
+                                                    </ResponsiveContainer>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))
+                                )}
+                            </div>
                         </div>
 
                         {/* At Risk Products */}
@@ -1009,7 +1055,8 @@ export default function AiForecasting() {
                                 <button className="text-xs font-bold text-blue-600 hover:underline">View All At Risk &rarr;</button>
                             </div>
 
-                            <div className="overflow-x-auto">
+                            {/* Desktop Table View */}
+                            <div className="hidden md:block overflow-x-auto">
                                 <table className="w-full text-left border-collapse">
                                     <thead>
                                         <tr className="border-b border-slate-100 text-[10px] font-bold uppercase tracking-wider text-slate-400">
@@ -1050,6 +1097,43 @@ export default function AiForecasting() {
                                         )}
                                     </tbody>
                                 </table>
+                            </div>
+
+                            {/* Mobile Card List View */}
+                            <div className="block md:hidden space-y-3">
+                                {loading ? (
+                                    <div className="py-8 text-center text-xs text-slate-400">Loading risk assessments...</div>
+                                ) : (
+                                    atRiskProducts.map((p, idx) => (
+                                        <div key={idx} className="bg-slate-50 rounded-2xl p-4 border border-slate-100 flex flex-col gap-3 shadow-sm hover:shadow transition">
+                                            <div className="flex justify-between items-start">
+                                                <div>
+                                                    <h4 className="font-bold text-slate-900 text-sm">{p.product}</h4>
+                                                    <p className="text-slate-400 text-[10px] font-semibold mt-0.5">{p.location}</p>
+                                                </div>
+                                                <span className={`px-2.5 py-0.5 rounded-full text-[9px] font-extrabold uppercase tracking-wider border
+                                                    ${p.riskType === 'Stock Out' ? 'bg-amber-50 text-amber-700 border-amber-100' : 'bg-red-50 text-red-700 border-red-100'}`}>
+                                                    {p.riskType}
+                                                </span>
+                                            </div>
+                                            
+                                            <div className="flex justify-between items-center border-t border-slate-100 pt-2.5">
+                                                <div className="text-xs font-bold">
+                                                    <span className="text-slate-400 text-[9px] uppercase tracking-wider block">Days to Risk</span>
+                                                    <span className="text-slate-900 font-extrabold text-sm">{p.daysToRisk} Days</span>
+                                                </div>
+                                                
+                                                <button
+                                                    onClick={() => showToast(`Initiated purchase order process for ${p.product}`, 'success')}
+                                                    className="flex items-center gap-1 py-1.5 px-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-[10px] font-bold transition cursor-pointer"
+                                                >
+                                                    <ShoppingCart size={12} />
+                                                    <span>Reorder</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    ))
+                                )}
                             </div>
                         </div>
 
