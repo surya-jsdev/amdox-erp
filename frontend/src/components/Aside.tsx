@@ -64,7 +64,7 @@ const baseMenuItems: MenuItem[] = [
     },
     { name: 'Projects', path: '/projects', icon: Briefcase },
     { name: 'Business Intelligence', path: '/business-intelligence', icon: BarChart3 },
-    { name: 'AI Forecasting', path: '/tasks', icon: LucideTimer },
+    { name: 'AI Forecasting', path: '/ai-forecasting', icon: Brain },
     { name: 'Settings', path: '/settings', icon: Settings },
     { name: 'Logout', path: '/logout', icon: LogOut }
 ]

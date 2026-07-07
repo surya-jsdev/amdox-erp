@@ -11,6 +11,7 @@ import Inventory from './pages/Supplychain/Inventory.js';
 import Profile from './pages/Profile/Profile.js';
 import ProjectPage from './pages/Project/Project.js';
 import BusinessIntelligence from './pages/BusinessIntelligence/BusinessIntelligence';
+import AiForecasting from './pages/AiForecasting/AiForecasting';
 
 function App() {
   const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
@@ -31,6 +32,7 @@ function App() {
       <Route path='/hr-payroll' element={<Hrpayroll />} />
       <Route path='/profile' element={<Profile />} />
       <Route path='/business-intelligence' element={<BusinessIntelligence />} />
+      <Route path='/ai-forecasting' element={<AiForecasting />} />
     </Routes>
   );
 }
