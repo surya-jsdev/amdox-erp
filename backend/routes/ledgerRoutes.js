@@ -12,8 +12,7 @@ const authorizeAdmin = (req, res, next) => {
     return res.status(403).json({ message: 'Admin access required' });
 };
 
-router.get('/', authorizeAdmin, getLedgerEntries);
-// router.get('/', getLedgerEntries);
+router.get("/", getLedgerEntries);
 router.post('/', authorizeAdmin, createLedgerEntry);
 router.put('/:id', authorizeAdmin, updateLedgerEntry);
 router.delete('/:id', authorizeAdmin, deleteLedgerEntry);

@@ -77,16 +77,18 @@ function FinanceLedger() {
     };
 
     useEffect(() => {
-        const storedUser = localStorage.getItem('user');
+        const storedUser = localStorage.getItem("user");
+
         if (storedUser) {
             try {
                 const parsed = JSON.parse(storedUser);
-                setIsAdmin(parsed?.role === 'Admin');
+                setIsAdmin(parsed?.role === "Admin");
             } catch (error) {
-                console.warn('Unable to parse user data', error);
+                console.warn("Unable to parse user data", error);
             }
         }
 
+        // Fetch ledger for every logged-in user
         fetchLedger();
     }, []);
 
