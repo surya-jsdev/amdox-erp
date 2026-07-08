@@ -13,6 +13,7 @@ const authorizeAdmin = (req, res, next) => {
 };
 
 router.get('/', authorizeAdmin, getLedgerEntries);
+// router.get('/', getLedgerEntries);
 router.post('/', authorizeAdmin, createLedgerEntry);
 router.put('/:id', authorizeAdmin, updateLedgerEntry);
 router.delete('/:id', authorizeAdmin, deleteLedgerEntry);

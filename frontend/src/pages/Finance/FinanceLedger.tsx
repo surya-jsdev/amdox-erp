@@ -125,7 +125,8 @@ function FinanceLedger() {
         try {
             setSubmitting(true);
             const method = editingId ? 'PUT' : 'POST';
-            const url = editingId ? `/api/ledger/${editingId}` : '/api/ledger';
+            const baseUrl = import.meta.env.VITE_API_URL || '';
+            const url = editingId ? `${baseUrl}/api/ledger/${editingId}` : `${baseUrl}/api/ledger`;
             const response = await fetch(url, {
                 method,
                 headers: {
@@ -135,10 +136,18 @@ function FinanceLedger() {
                 body: JSON.stringify(payload)
             });
 
-            const data = await response.json();
             if (!response.ok) {
-                throw new Error(data.message || 'Unable to save ledger entry');
+                let errorMessage = 'Unable to save ledger entry';
+                try {
+                    const data = await response.json();
+                    errorMessage = data.message || errorMessage;
+                } catch (_) {
+                    errorMessage = `HTTP error! status: ${response.status}`;
+                }
+                throw new Error(errorMessage);
             }
+
+            const data = await response.json();
 
             setMessage(editingId ? 'Ledger entry updated successfully.' : 'Ledger entry created successfully.');
             resetForm();
@@ -173,16 +182,24 @@ function FinanceLedger() {
         }
 
         try {
-            const response = await fetch(`/api/ledger/${id}`, {
+            const baseUrl = import.meta.env.VITE_API_URL || '';
+            const response = await fetch(`${baseUrl}/api/ledger/${id}`, {
                 method: 'DELETE',
                 headers: {
                     'x-user-role': getStoredUserRole()
                 }
             });
-            const data = await response.json();
             if (!response.ok) {
-                throw new Error(data.message || 'Unable to delete ledger entry');
+                let errorMessage = 'Unable to delete ledger entry';
+                try {
+                    const data = await response.json();
+                    errorMessage = data.message || errorMessage;
+                } catch (_) {
+                    errorMessage = `HTTP error! status: ${response.status}`;
+                }
+                throw new Error(errorMessage);
             }
+            const data = await response.json();
             setMessage('Ledger entry deleted successfully.');
             await fetchLedger();
         } catch (err) {
