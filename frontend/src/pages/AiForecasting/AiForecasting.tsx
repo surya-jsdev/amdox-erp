@@ -354,7 +354,7 @@ export default function AiForecasting() {
                     <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3 w-full md:w-auto justify-end">
                         {/* Custom Date Range Picker Container */}
                         <div className="flex items-center justify-between gap-2 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl flex-1 sm:flex-initial">
-                            <Calendar size={14} className="text-slate-400 flex-shrink-0" />
+                            <Calendar size={14} className="text-slate-400 shrink-0" />
                             <input
                                 type="date"
                                 value={startDate}
@@ -517,7 +517,7 @@ export default function AiForecasting() {
                                 </div>
                             </div>
                             <div className="mt-3">
-                                <h3 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight text-amber-600">
+                                <h3 className="text-xl sm:text-2xl font-bold tracking-tight text-amber-600">
                                     {loading ? '...' : (kpis?.atRiskStockOutCount || 23)}
                                 </h3>
                                 <p className="text-xs font-semibold text-emerald-600 flex items-center gap-1 mt-1">
@@ -537,7 +537,7 @@ export default function AiForecasting() {
                                 </div>
                             </div>
                             <div className="mt-3">
-                                <h3 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight text-rose-600">
+                                <h3 className="text-xl sm:text-2xl font-bold tracking-tight text-rose-600">
                                     {loading ? '...' : (kpis?.overstockRiskCount || 15)}
                                 </h3>
                                 <p className="text-xs font-semibold text-emerald-600 flex items-center gap-1 mt-1">
@@ -590,7 +590,7 @@ export default function AiForecasting() {
 
                     {/* Secondary Filters Bar */}
                     <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 flex flex-wrap gap-4 items-center">
-                        <div className="flex flex-col flex-1 min-w-[150px]">
+                        <div className="flex flex-col flex-1 min-w-37.5">
                             <label className="text-[10px] font-bold uppercase text-slate-400 mb-1">Product Category</label>
                             <div className="relative">
                                 <select
@@ -609,7 +609,7 @@ export default function AiForecasting() {
                             </div>
                         </div>
 
-                        <div className="flex flex-col flex-1 min-w-[150px]">
+                        <div className="flex flex-col flex-1 min-w-37.5">
                             <label className="text-[10px] font-bold uppercase text-slate-400 mb-1">Product</label>
                             <div className="relative">
                                 <select
@@ -625,7 +625,7 @@ export default function AiForecasting() {
                             </div>
                         </div>
 
-                        <div className="flex flex-col flex-1 min-w-[150px]">
+                        <div className="flex flex-col flex-1 min-w-37.5">
                             <label className="text-[10px] font-bold uppercase text-slate-400 mb-1">Warehouse</label>
                             <div className="relative">
                                 <select
@@ -641,7 +641,7 @@ export default function AiForecasting() {
                             </div>
                         </div>
 
-                        <div className="flex flex-col flex-1 min-w-[150px]">
+                        <div className="flex flex-col flex-1 min-w-37.5">
                             <label className="text-[10px] font-bold uppercase text-slate-400 mb-1">Time Horizon</label>
                             <div className="relative">
                                 <select
@@ -662,7 +662,7 @@ export default function AiForecasting() {
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
                         {/* Demand Forecast vs Actual Chart */}
-                        <div className="lg:col-span-2 bg-white rounded-2xl p-5 shadow-sm border border-slate-100 flex flex-col justify-between relative min-h-[450px]">
+                        <div className="lg:col-span-2 bg-white rounded-2xl p-5 shadow-sm border border-slate-100 flex flex-col justify-between relative min-h-112">
                             <div className="flex justify-between items-center mb-4">
                                 <div className="flex items-center gap-2">
                                     <h3 className="text-base font-bold text-slate-900">Demand Forecast vs Actual</h3>
@@ -696,7 +696,7 @@ export default function AiForecasting() {
                             </div>
 
                             {/* Chart rendering */}
-                            <div className="flex-1 w-full min-h-[300px]">
+                            <div className="flex-1 w-full min-h-75">
                                 {loading ? (
                                     <div className="absolute inset-0 flex items-center justify-center bg-white/70">
                                         <div className="flex flex-col items-center gap-2">
@@ -836,7 +836,7 @@ export default function AiForecasting() {
                                                             insight.variant === 'info' ? 'bg-blue-50 border-blue-100 text-blue-800' :
                                                                 'bg-indigo-50 border-indigo-100 text-indigo-800'}`}
                                             >
-                                                <div className="mt-0.5 flex-shrink-0">
+                                                <div className="mt-0.5 shrink-0">
                                                     {insight.variant === 'success' && <CheckCircle2 size={15} className="text-emerald-600" />}
                                                     {insight.variant === 'warning' && <AlertTriangle size={15} className="text-amber-600" />}
                                                     {insight.variant === 'info' && <Info size={15} className="text-blue-600" />}
@@ -857,7 +857,7 @@ export default function AiForecasting() {
                             <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-100">
                                 <h3 className="text-base font-bold text-slate-900 mb-4">Top Forecast Drivers</h3>
                                 <div className="flex items-center gap-4">
-                                    <div className="w-28 h-28 flex-shrink-0">
+                                    <div className="w-28 h-28 shrink-0">
                                         {loading ? (
                                             <div className="w-full h-full flex items-center justify-center text-xs text-slate-400">Loading...</div>
                                         ) : (
@@ -885,7 +885,7 @@ export default function AiForecasting() {
                                             <div key={driver.name} className="flex items-center justify-between text-xs font-semibold text-slate-600">
                                                 <div className="flex items-center gap-1.5">
                                                     <span className="w-2 h-2 rounded-full" style={{ backgroundColor: DRIVER_COLORS[index % DRIVER_COLORS.length] }}></span>
-                                                    <span className="truncate max-w-[100px]">{driver.name}</span>
+                                                    <span className="truncate max-w-25">{driver.name}</span>
                                                 </div>
                                                 <span className="font-bold text-slate-800">{driver.percentage}%</span>
                                             </div>
