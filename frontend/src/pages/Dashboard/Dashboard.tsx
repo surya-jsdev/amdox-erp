@@ -85,7 +85,7 @@ function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [userName, setUserName] = useState('');
-
+  const [userRole, setUserRole] = useState('');
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
@@ -93,6 +93,7 @@ function Dashboard() {
         const parsed = JSON.parse(storedUser);
         if (parsed?.name) {
           setUserName(parsed.name);
+          if (parsed?.role) setUserRole(parsed.role);
         }
       } catch (error) {
         console.warn('Unable to parse stored user data', error);
@@ -153,6 +154,10 @@ function Dashboard() {
               <Link to="/profile" className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-slate-900 text-lg font-semibold text-white transition hover:bg-slate-800">
                 {userName ? userName.charAt(0).toUpperCase() : 'J'}
               </Link>
+              <div>
+                <p className='text-xs'>{userName}</p>
+                <p className='text-xs'>{userRole}</p>
+              </div>
             </div>
           </div>
 
@@ -242,7 +247,7 @@ function Dashboard() {
                     </div>
                     <div className="rounded-full bg-slate-50 px-3 py-2 text-xs text-slate-600">Total {formatCurrency(totalExpenses)}</div>
                   </div>
-                  
+
                   <div className="mb-6 h-64 rounded-3xl bg-slate-50 p-2 sm:h-72">
                     <ResponsiveContainer width="100%" height="100%">
                       <PieChart>
