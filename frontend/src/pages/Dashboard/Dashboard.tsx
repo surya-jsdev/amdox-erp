@@ -141,8 +141,8 @@ function Dashboard() {
               <p className="mt-2 text-sm text-slate-600">Here&rsquo;s what&rsquo;s happening in your organization today.</p>
             </div>
 
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-              <form className="relative w-full sm:min-w-60">
+            <div className="flex items-center gap-3 w-full sm:w-auto">
+              <form className="relative flex-1 sm:w-64">
                 <input
                   type="search"
                   placeholder="Search here"
@@ -150,7 +150,7 @@ function Dashboard() {
                 />
                 <Search size={18} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400" />
               </form>
-              <Link to="/profile" className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-slate-900 text-lg font-semibold text-white">
+              <Link to="/profile" className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-slate-900 text-lg font-semibold text-white transition hover:bg-slate-800">
                 {userName ? userName.charAt(0).toUpperCase() : 'J'}
               </Link>
             </div>
@@ -200,7 +200,7 @@ function Dashboard() {
                   </div>
 
                   <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                     <div className="rounded-3xl bg-slate-50 p-5">
+                    <div className="rounded-3xl bg-slate-50 p-5">
                       <p className="text-sm text-slate-500">This month revenue</p>
                       <p className="mt-3 text-2xl font-semibold text-slate-900">{formatCurrency(totalRevenue)}</p>
                     </div>
@@ -242,10 +242,10 @@ function Dashboard() {
                     </div>
                     <div className="rounded-full bg-slate-50 px-3 py-2 text-xs text-slate-600">Total {formatCurrency(totalExpenses)}</div>
                   </div>
-
+                  
                   <div className="mb-6 h-64 rounded-3xl bg-slate-50 p-2 sm:h-72">
                     <ResponsiveContainer width="100%" height="100%">
-                      <PieChart >
+                      <PieChart>
                         <Legend verticalAlign="top" height={36} iconType="circle" />
                         <Pie data={expenseCategories} dataKey="percentage" nameKey="category" cx="50%" cy="50%" innerRadius={60} outerRadius={90} paddingAngle={2}>
                           {expenseCategories.map((entry) => (
