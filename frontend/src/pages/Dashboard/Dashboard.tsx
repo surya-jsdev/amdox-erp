@@ -73,10 +73,29 @@ const iconMap = {
 }
 
 const formatCurrency = (val: number) => {
+  let currencyCode = 'USD';
+  let decimals = 0;
+  
+  const storedSettings = localStorage.getItem('systemSettings');
+  if (storedSettings) {
+    try {
+      const parsed = JSON.parse(storedSettings);
+      if (parsed?.currency?.baseCurrency) {
+        currencyCode = parsed.currency.baseCurrency.slice(0, 3);
+      }
+      if (parsed?.currency?.decimalPlaces !== undefined) {
+        decimals = parsed.currency.decimalPlaces;
+      }
+    } catch (e) {
+      console.warn(e);
+    }
+  }
+
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
-    currency: 'USD',
-    maximumFractionDigits: 0
+    currency: currencyCode,
+    maximumFractionDigits: decimals,
+    minimumFractionDigits: decimals
   }).format(val);
 };
 
@@ -156,7 +175,7 @@ function Dashboard() {
               </Link>
               <div>
                 <p className='text-xs'>{userName}</p>
-                <p className='text-xs text-slate-800'>{userRole}</p>
+                {userRole !== 'Admin' && <p className='text-xs text-slate-800'>{userRole}</p>}
               </div>
             </div>
           </div>
@@ -174,12 +193,17 @@ function Dashboard() {
               <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
                 {summaryCards.map((card) => {
                   const Icon = iconMap[card.type as keyof typeof iconMap] || Circle;
+                  const isCurrency = card.type === 'revenue' || card.type === 'expenses';
+                  const displayValue = isCurrency
+                    ? formatCurrency(parseFloat(String(card.value).replace(/[^0-9.-]+/g, '')) || 0)
+                    : card.value;
+
                   return (
                     <div key={card.label} className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
                       <div className="flex items-center justify-between gap-3">
                         <div>
                           <p className="text-sm font-medium text-slate-500">{card.label}</p>
-                          <p className="mt-3 text-3xl font-semibold text-slate-900">{card.value}</p>
+                          <p className="mt-3 text-3xl font-semibold text-slate-900">{displayValue}</p>
                         </div>
                         <div className={`flex h-12 w-12 items-center justify-center rounded-2xl ${card.color}`}>
                           <Icon size={20} />

@@ -15,6 +15,7 @@ const AiForecasting = lazy(() => import('./pages/AiForecasting/AiForecasting'));
 const Dashboard = lazy(() => import('./pages/Dashboard/Dashboard.js'));
 const Login = lazy(() => import('./pages/Auth/Login.js'));
 const Vendors = lazy(() => import('./pages/Supplychain/Vendors.js'));
+const SystemSettings = lazy(() => import('./SystemSettings/SystemSettings.js'));
 
 function App() {
   const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
@@ -37,6 +38,7 @@ function App() {
         <Route path='/profile' element={<Profile />} />
         <Route path='/business-intelligence' element={<BusinessIntelligence />} />
         <Route path='/ai-forecasting' element={<AiForecasting />} />
+        <Route path='/settings' element={<SystemSettings />} />
       </Routes>
     </Suspense>
   );

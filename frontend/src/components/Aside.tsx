@@ -65,7 +65,13 @@ const baseMenuItems: MenuItem[] = [
     { name: 'Projects', path: '/projects', icon: Briefcase },
     { name: 'Business Intelligence', path: '/business-intelligence', icon: BarChart3 },
     { name: 'AI Forecasting', path: '/ai-forecasting', icon: Brain },
-    { name: 'Settings', path: '/settings', icon: Settings },
+    {
+        name: 'Settings',
+        icon: Settings,
+        children: [
+            { name: 'System Settings', path: '/settings', icon: Settings },
+        ]
+    },
     { name: 'Logout', path: '/logout', icon: LogOut }
 ]
 
@@ -95,15 +101,21 @@ function Aside() {
         if (
             location.pathname.startsWith("/vendors") ||
             location.pathname.startsWith("/purchase-orders") ||
-            location.pathname.startsWith("/inventory") ||
-            location.pathname.startsWith("/forecasting") ||
-            location.pathname.startsWith("/projects")
+            location.pathname.startsWith("/inventory")
         ) {
-            if (location.pathname.startsWith("/projects")) {
-                setOpenDropdown(null);
-            } else {
-                setOpenDropdown("Supply Chain");
-            }
+            setOpenDropdown("Supply Chain");
+        } else if (
+            location.pathname.startsWith("/settings") ||
+            location.pathname.startsWith("/admin/users")
+        ) {
+            setOpenDropdown("Settings");
+        } else if (
+            location.pathname.startsWith("/projects") ||
+            location.pathname.startsWith("/Dashboard") ||
+            location.pathname.startsWith("/finance-ledger") ||
+            location.pathname.startsWith("/hr-payroll")
+        ) {
+            setOpenDropdown(null);
         }
     }, [location.pathname]);
 
