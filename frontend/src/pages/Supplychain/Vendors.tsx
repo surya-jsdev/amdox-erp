@@ -33,7 +33,7 @@ const emptyForm: VendorFormState = {
     status: 'Active',
 };
 
-function Supplychain() {
+function Vendors() {
     const [vendors, setVendors] = useState<VendorItem[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -411,4 +411,4 @@ function Supplychain() {
     );
 }
 
-export default Supplychain;
+export default Vendors;

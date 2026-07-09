@@ -1,29 +1,26 @@
 import { lazy, Suspense } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import Login from './pages/Auth/Login.js';
-import Registration from './pages/Auth/Registration.js';
-import FinanceLedger from './pages/Finance/FinanceLedger.js';
-import AdminUsers from './pages/Admin/AdminUsers.js';
-import Hrpayroll from './pages/Hr/Hrpayroll.js';
-import Supplychain from './pages/Supplychain/Supplychain.js';
-import PurchaseOrderPage from './pages/Supplychain/PurchaseOrder';
-import Inventory from './pages/Supplychain/Inventory.js';
-import Profile from './pages/Profile/Profile.js';
-import ProjectPage from './pages/Project/Project.js';
-import BusinessIntelligence from './pages/BusinessIntelligence/BusinessIntelligence';
-import AiForecasting from './pages/AiForecasting/AiForecasting';
+import Spinner from './components/Spinner.js';
+
+const Registration = lazy(() => import('./pages/Auth/Registration.js'));
+const FinanceLedger = lazy(() => import('./pages/Finance/FinanceLedger.js'));
+const AdminUsers = lazy(() => import('./pages/Admin/AdminUsers.js'));
+const Hrpayroll = lazy(() => import('./pages/Hr/Hrpayroll.js'));
+const PurchaseOrderPage = lazy(() => import('./pages/Supplychain/PurchaseOrder'));
+const Inventory = lazy(() => import('./pages/Supplychain/Inventory.js'));
+const Profile = lazy(() => import('./pages/Profile/Profile.js'));
+const ProjectPage = lazy(() => import('./pages/Project/Project.js'));
+const BusinessIntelligence = lazy(() => import('./pages/BusinessIntelligence/BusinessIntelligence'));
+const AiForecasting = lazy(() => import('./pages/AiForecasting/AiForecasting'));
 const Dashboard = lazy(() => import('./pages/Dashboard/Dashboard.js'));
+const Login = lazy(() => import('./pages/Auth/Login.js'));
+const Vendors = lazy(() => import('./pages/Supplychain/Vendors.js'));
 
 function App() {
   const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
 
   return (
-    <Suspense fallback={
-      <div className="flex h-screen w-screen flex-col items-center justify-center bg-blue-950 text-white">
-        <div className="h-12 w-12 animate-spin rounded-full border-4 border-blue-900 border-t-blue-400"></div>
-        <p className="mt-4 text-sm font-medium text-blue-300">Loading...</p>
-      </div>
-    }>
+    <Suspense fallback={<Spinner/>}>
       <Routes>
         <Route path="/" element={isLoggedIn ? <Navigate to="/Dashboard" /> : <Login />} />
         <Route path="/Login" element={<Login />} />
@@ -31,7 +28,7 @@ function App() {
         <Route path='/Dashboard' element={<Dashboard />} />
         <Route path='/dashboard' element={<Navigate to="/Dashboard" replace />} />
         <Route path='/finance-ledger' element={<FinanceLedger />} />
-        <Route path='/vendors' element={<Supplychain />} />
+        <Route path='/vendors' element={<Vendors />} />
         <Route path='/inventory' element={<Inventory />} />
         <Route path='/purchase-orders' element={<PurchaseOrderPage />} />
         <Route path='/projects' element={<ProjectPage />} />
