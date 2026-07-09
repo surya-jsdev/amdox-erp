@@ -58,6 +58,26 @@ const UserSchema = new mongoose.Schema({
         type: String,
         enum: ["Admin", "Manager", "Employee"],
         default: "Employee"
+    },
+    theme: {
+        type: String,
+        default: 'light'
+    },
+    language: {
+        type: String,
+        default: 'en'
+    },
+    emailNotifications: {
+        type: Boolean,
+        default: true
+    },
+    pushNotifications: {
+        type: Boolean,
+        default: false
+    },
+    orderAlerts: {
+        type: Boolean,
+        default: true
     }
 },
     {

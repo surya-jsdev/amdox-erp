@@ -156,7 +156,7 @@ function Dashboard() {
               </Link>
               <div>
                 <p className='text-xs'>{userName}</p>
-                <p className='text-xs'>{userRole}</p>
+                <p className='text-xs text-slate-800'>{userRole}</p>
               </div>
             </div>
           </div>
