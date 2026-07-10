@@ -83,6 +83,9 @@ export default function BusinessIntelligence() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [biData, setBiData] = useState<any>(null);
+    const [groupBy, setGroupBy] = useState<'Daily' | 'Weekly' | 'Monthly'>('Monthly');
+    const [groupByDropdownOpen, setGroupByDropdownOpen] = useState(false);
+    const initialLoadRef = React.useRef(true);
 
     // Filters states
     const getFormattedDate = (date: Date) => {
@@ -142,7 +145,8 @@ export default function BusinessIntelligence() {
                 project,
                 customer,
                 productCategory,
-                status
+                status,
+                groupBy
             });
 
             // Adjust URL to point to backend server port 5000 (standard in this app)
@@ -167,10 +171,15 @@ export default function BusinessIntelligence() {
         }
     };
 
-    // Load on mount
+    // Load on mount and when groupBy changes
     useEffect(() => {
-        fetchBIData(true);
-    }, []);
+        if (initialLoadRef.current) {
+            fetchBIData(true);
+            initialLoadRef.current = false;
+        } else {
+            fetchBIData(false);
+        }
+    }, [groupBy]);
 
     const handleApplyFilters = () => {
         fetchBIData(false);
@@ -187,6 +196,7 @@ export default function BusinessIntelligence() {
         setCustomer('All Customers');
         setProductCategory('All Categories');
         setStatus('All Status');
+        setGroupBy('Monthly');
         showToast('Filters reset to default', 'info');
     };
 
@@ -484,11 +494,45 @@ export default function BusinessIntelligence() {
                                     <div className="flex justify-between items-center mb-4">
                                         <div>
                                             <h4 className="text-sm font-semibold text-slate-400 uppercase tracking-wider">Sales Analytics</h4>
-                                            <h3 className="text-lg font-bold text-slate-800">Sales Trend <span className="text-xs font-medium text-slate-400">(Last 12 Months)</span></h3>
+                                            <h3 className="text-lg font-bold text-slate-800">
+                                                Sales Trend <span className="text-xs font-medium text-slate-400">
+                                                    ({groupBy === 'Daily' ? 'Daily' : groupBy === 'Weekly' ? 'Weekly' : 'Last 12 Months'})
+                                                </span>
+                                            </h3>
                                         </div>
-                                        <div className="flex items-center gap-1.5 px-3 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs font-semibold text-slate-600 cursor-pointer">
-                                            <span>Monthly</span>
-                                            <ChevronDown size={14} />
+                                        <div className="relative">
+                                            <button
+                                                onClick={() => setGroupByDropdownOpen(!groupByDropdownOpen)}
+                                                className="flex items-center gap-1.5 px-3 py-1 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-lg text-xs font-semibold text-slate-600 cursor-pointer transition-colors duration-150"
+                                            >
+                                                <span>{groupBy}</span>
+                                                <ChevronDown size={14} className={`transform transition-transform duration-200 ${groupByDropdownOpen ? 'rotate-180' : ''}`} />
+                                            </button>
+
+                                            {groupByDropdownOpen && (
+                                                <>
+                                                    <div
+                                                        className="fixed inset-0 z-30"
+                                                        onClick={() => setGroupByDropdownOpen(false)}
+                                                    />
+                                                    <div className="absolute right-0 mt-1.5 w-28 bg-white border border-slate-200 rounded-lg shadow-lg py-1 z-40 animate-in fade-in slide-in-from-top-1 duration-150">
+                                                        {(['Daily', 'Weekly', 'Monthly'] as const).map((option) => (
+                                                            <button
+                                                                key={option}
+                                                                onClick={() => {
+                                                                    setGroupBy(option);
+                                                                    setGroupByDropdownOpen(false);
+                                                                }}
+                                                                className={`w-full text-left px-3 py-1.5 text-xs font-medium transition-colors duration-150 hover:bg-slate-50
+                                                                    ${groupBy === option ? 'text-blue-600 bg-blue-50/50' : 'text-slate-600'}
+                                                                `}
+                                                            >
+                                                                {option}
+                                                            </button>
+                                                        ))}
+                                                    </div>
+                                                </>
+                                            )}
                                         </div>
                                     </div>
 
@@ -522,7 +566,9 @@ export default function BusinessIntelligence() {
                                     <div className="flex justify-between items-center mb-4">
                                         <div>
                                             <h4 className="text-sm font-semibold text-slate-400 uppercase tracking-wider">Financial Health</h4>
-                                            <h3 className="text-lg font-bold text-slate-800">Revenue by Month</h3>
+                                            <h3 className="text-lg font-bold text-slate-800">
+                                                Revenue by {groupBy === 'Daily' ? 'Day' : groupBy === 'Weekly' ? 'Week' : 'Month'}
+                                            </h3>
                                         </div>
                                         <div className="flex items-center gap-1.5 px-3 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs font-semibold text-slate-600 cursor-pointer">
                                             <span>This Year</span>

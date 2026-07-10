@@ -119,6 +119,7 @@ export const getBIData = async (req, res) => {
             customer,
             productCategory,
             status,
+            groupBy = 'Monthly',
         } = req.query;
 
         // Build main filter match for BISalesRecord
@@ -245,33 +246,51 @@ export const getBIData = async (req, res) => {
             { status: 'Not Started', percentage: Math.round((projectStatusCounts['Not Started'] / totalProj) * 100) || 10, color: '#ef4444' },
         ];
 
-        // 3. Sales Trend & Revenue by Month
-        // Group by month
-        const monthlyAggregate = {};
+        // 3. Sales Trend & Revenue Grouped dynamically
+        const trendAggregate = {};
         records.forEach(r => {
-            const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-            const yearStr = r.date.getFullYear();
-            const monthStr = monthNames[r.date.getMonth()];
-            const key = `${monthStr} ${yearStr}`;
+            let key = '';
+            let label = '';
+            const date = new Date(r.date);
 
-            if (!monthlyAggregate[key]) {
-                monthlyAggregate[key] = { month: monthStr, key, timestamp: r.date.getTime(), revenue: 0, profit: 0, orders: 0 };
+            if (groupBy === 'Daily') {
+                const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                label = `${monthNames[date.getMonth()]} ${date.getDate()}`;
+                key = date.toISOString().split('T')[0];
+            } else if (groupBy === 'Weekly') {
+                const d = new Date(date);
+                const day = d.getDay();
+                const diff = d.getDate() - day;
+                const startOfWeek = new Date(d.setDate(diff));
+                const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                label = `Wk ${monthNames[startOfWeek.getMonth()]} ${startOfWeek.getDate()}`;
+                key = startOfWeek.toISOString().split('T')[0];
+            } else { // Monthly
+                const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                const yearStr = date.getFullYear();
+                const monthStr = monthNames[date.getMonth()];
+                label = `${monthStr} ${yearStr}`;
+                key = `${monthStr} ${yearStr}`;
             }
-            monthlyAggregate[key].revenue += r.revenue;
-            monthlyAggregate[key].profit += r.profit;
-            monthlyAggregate[key].orders += r.unitsSold;
+
+            if (!trendAggregate[key]) {
+                trendAggregate[key] = { month: label, key, timestamp: date.getTime(), revenue: 0, profit: 0, orders: 0 };
+            }
+            trendAggregate[key].revenue += r.revenue;
+            trendAggregate[key].profit += r.profit;
+            trendAggregate[key].orders += r.unitsSold;
         });
 
-        const sortedMonths = Object.values(monthlyAggregate).sort((a, b) => a.timestamp - b.timestamp);
+        const sortedTrend = Object.values(trendAggregate).sort((a, b) => a.timestamp - b.timestamp);
 
         // Final format for Sales Trend & Revenue charts
-        const salesTrend = sortedMonths.map(m => ({
+        const salesTrend = sortedTrend.map(m => ({
             month: m.month,
             revenue: m.revenue,
             profit: m.profit,
         }));
 
-        const revenueByMonth = sortedMonths.map(m => ({
+        const revenueByMonth = sortedTrend.map(m => ({
             month: m.month,
             revenue: m.revenue,
             expenses: m.revenue - m.profit,
