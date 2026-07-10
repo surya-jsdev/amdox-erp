@@ -162,14 +162,14 @@ function Dashboard() {
             </div>
 
             <div className="flex items-center gap-3 w-full sm:w-auto">
-              <form className="relative flex-1 sm:w-64">
+              {/* <form className="relative flex-1 sm:w-64">
                 <input
                   type="search"
                   placeholder="Search here"
                   className="h-12 w-full rounded-full border border-slate-300 bg-white px-4 pr-11 text-sm shadow-sm outline-none transition focus:border-blue-500"
                 />
                 <Search size={18} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400" />
-              </form>
+              </form> */}
               <Link to="/profile" className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-slate-900 text-lg font-semibold text-white transition hover:bg-slate-800">
                 {userName ? userName.charAt(0).toUpperCase() : 'J'}
               </Link>

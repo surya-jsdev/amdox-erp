@@ -232,6 +232,26 @@ function Aside() {
                                 </div>
                             );
                         }
+// Logout 
+                        if (item.name === "Logout") {
+                            return (
+                                <button
+                                    key={item.name}
+                                    onClick={() => {
+                                        if (window.confirm("Are you sure you want to log out?")) {
+                                            setIsOpen(false);
+                                            localStorage.removeItem("isLoggedIn");
+                                            localStorage.removeItem("user");
+                                            window.location.href = "/";
+                                        }
+                                    }}
+                                    className="flex w-full items-center gap-3 rounded-lg p-3 transition text-white hover:bg-blue-700 text-left cursor-pointer"
+                                >
+                                    <Icon size={20} />
+                                    {item.name}
+                                </button>
+                            );
+                        }
 
                         return (
                             <NavLink

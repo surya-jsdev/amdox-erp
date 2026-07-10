@@ -169,7 +169,7 @@ function AdminUsers() {
                             <div>
                                 <label className="mb-2 block text-sm font-medium text-slate-700">Role</label>
                                 <select name="role" value={formState.role} onChange={handleChange} className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none">
-                                    <option value="Admin">Admin</option>
+                                    <option value="Admin">Administrator</option>
                                     <option value="Manager">Manager</option>
                                     <option value="Employee">Employee</option>
                                 </select>

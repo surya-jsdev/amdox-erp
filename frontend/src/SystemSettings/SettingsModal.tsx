@@ -71,7 +71,7 @@ export default function SettingsModal({
   onApply,
   addToast,
 }: SettingsModalProps) {
-  
+
   // Local state for user management form
   const [newUserName, setNewUserName] = useState('');
   const [newUserEmail, setNewUserEmail] = useState('');
@@ -126,22 +126,21 @@ export default function SettingsModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      {/* Backdrop */}
-      <div 
-        className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity" 
+
+      <div
+        className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity"
         onClick={onClose}
       />
-      
-      {/* Modal Body */}
+
+
       <div className="relative bg-white rounded-3xl shadow-xl w-full max-w-lg overflow-hidden flex flex-col max-h-[85vh] z-10 border border-slate-100 animate-scale-up">
-        
-        {/* Modal Header */}
+
         <div className="px-6 py-5 border-b border-slate-100 flex items-center justify-between bg-slate-50">
           <div>
             <h3 className="text-lg font-bold text-slate-900">{getTitle()}</h3>
             <p className="text-xs text-slate-500 mt-0.5">Configure options below then click Apply.</p>
           </div>
-          <button 
+          <button
             onClick={onClose}
             className="p-1 rounded-full hover:bg-slate-200 text-slate-400 hover:text-slate-600 transition"
           >
@@ -149,16 +148,15 @@ export default function SettingsModal({
           </button>
         </div>
 
-        {/* Modal Content Scroll Area */}
         <div className="flex-1 overflow-y-auto p-6 space-y-4">
-          
+
           {/* 1. Company Profile */}
           {activeModal === 'companyProfile' && (
             <>
               <div className="flex flex-col gap-1.5">
                 <label className="text-xs font-semibold text-slate-600">Company Name</label>
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   value={tempSettings.companyProfile.companyName}
                   onChange={e => setTempSettings({
                     ...tempSettings,
@@ -169,8 +167,8 @@ export default function SettingsModal({
               </div>
               <div className="flex flex-col gap-1.5">
                 <label className="text-xs font-semibold text-slate-600">Support Email</label>
-                <input 
-                  type="email" 
+                <input
+                  type="email"
                   value={tempSettings.companyProfile.supportEmail}
                   onChange={e => setTempSettings({
                     ...tempSettings,
@@ -181,8 +179,8 @@ export default function SettingsModal({
               </div>
               <div className="flex flex-col gap-1.5">
                 <label className="text-xs font-semibold text-slate-600">Contact Phone</label>
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   value={tempSettings.companyProfile.phone}
                   onChange={e => setTempSettings({
                     ...tempSettings,
@@ -193,7 +191,7 @@ export default function SettingsModal({
               </div>
               <div className="flex flex-col gap-1.5">
                 <label className="text-xs font-semibold text-slate-600">Company Address</label>
-                <textarea 
+                <textarea
                   rows={3}
                   value={tempSettings.companyProfile.address}
                   onChange={e => setTempSettings({
@@ -205,8 +203,8 @@ export default function SettingsModal({
               </div>
               <div className="flex flex-col gap-1.5">
                 <label className="text-xs font-semibold text-slate-600">Website URL</label>
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   value={tempSettings.companyProfile.website}
                   onChange={e => setTempSettings({
                     ...tempSettings,
@@ -223,7 +221,7 @@ export default function SettingsModal({
             <>
               <div className="flex flex-col gap-1.5">
                 <label className="text-xs font-semibold text-slate-600">System Language</label>
-                <select 
+                <select
                   value={tempSettings.localization.language}
                   onChange={e => setTempSettings({
                     ...tempSettings,
@@ -240,7 +238,7 @@ export default function SettingsModal({
               </div>
               <div className="flex flex-col gap-1.5">
                 <label className="text-xs font-semibold text-slate-600">Date Format</label>
-                <select 
+                <select
                   value={tempSettings.localization.dateFormat}
                   onChange={e => setTempSettings({
                     ...tempSettings,
@@ -255,7 +253,7 @@ export default function SettingsModal({
               </div>
               <div className="flex flex-col gap-1.5">
                 <label className="text-xs font-semibold text-slate-600">Time Zone</label>
-                <select 
+                <select
                   value={tempSettings.localization.timezone}
                   onChange={e => setTempSettings({
                     ...tempSettings,
@@ -278,7 +276,7 @@ export default function SettingsModal({
             <>
               <div className="flex flex-col gap-1.5">
                 <label className="text-xs font-semibold text-slate-600">Base Currency</label>
-                <select 
+                <select
                   value={tempSettings.currency.baseCurrency}
                   onChange={e => setTempSettings({
                     ...tempSettings,
@@ -295,7 +293,7 @@ export default function SettingsModal({
               </div>
               <div className="flex flex-col gap-1.5">
                 <label className="text-xs font-semibold text-slate-600">Decimal Precision</label>
-                <select 
+                <select
                   value={tempSettings.currency.decimalPlaces}
                   onChange={e => setTempSettings({
                     ...tempSettings,
@@ -313,7 +311,7 @@ export default function SettingsModal({
                   <p className="text-xs font-semibold text-slate-800">Enable Multi-Currency</p>
                   <p className="text-[10px] text-slate-500">Allow transactions in foreign currencies</p>
                 </div>
-                <input 
+                <input
                   type="checkbox"
                   checked={tempSettings.currency.multiCurrency}
                   onChange={e => setTempSettings({
@@ -333,8 +331,8 @@ export default function SettingsModal({
               <div className="grid grid-cols-2 gap-4">
                 <div className="flex flex-col gap-1.5">
                   <label className="text-xs font-semibold text-slate-600">Invoices Prefix</label>
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
                     value={tempSettings.documentNumbering.invoicePrefix}
                     onChange={e => setTempSettings({
                       ...tempSettings,
@@ -345,8 +343,8 @@ export default function SettingsModal({
                 </div>
                 <div className="flex flex-col gap-1.5">
                   <label className="text-xs font-semibold text-slate-600">Purchase Orders Prefix</label>
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
                     value={tempSettings.documentNumbering.poPrefix}
                     onChange={e => setTempSettings({
                       ...tempSettings,
@@ -357,8 +355,8 @@ export default function SettingsModal({
                 </div>
                 <div className="flex flex-col gap-1.5">
                   <label className="text-xs font-semibold text-slate-600">Sales Orders Prefix</label>
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
                     value={tempSettings.documentNumbering.soPrefix}
                     onChange={e => setTempSettings({
                       ...tempSettings,
@@ -369,8 +367,8 @@ export default function SettingsModal({
                 </div>
                 <div className="flex flex-col gap-1.5">
                   <label className="text-xs font-semibold text-slate-600">Customers Prefix</label>
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
                     value={tempSettings.documentNumbering.customerPrefix}
                     onChange={e => setTempSettings({
                       ...tempSettings,
@@ -388,8 +386,8 @@ export default function SettingsModal({
             <>
               <div className="flex flex-col gap-1.5">
                 <label className="text-xs font-semibold text-slate-600">Minimum Password Length</label>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   min="6"
                   max="24"
                   value={tempSettings.security.minPasswordLength}
@@ -403,7 +401,7 @@ export default function SettingsModal({
 
               <div className="flex flex-col gap-1.5">
                 <label className="text-xs font-semibold text-slate-600">Idle Session Timeout</label>
-                <select 
+                <select
                   value={tempSettings.security.sessionTimeout}
                   onChange={e => setTempSettings({
                     ...tempSettings,
@@ -424,7 +422,7 @@ export default function SettingsModal({
                     <p className="text-xs font-semibold text-slate-800">Enforce Numbers & Symbols</p>
                     <p className="text-[10px] text-slate-500">Require complexity rules for passwords</p>
                   </div>
-                  <input 
+                  <input
                     type="checkbox"
                     checked={tempSettings.security.requireSpecialChars}
                     onChange={e => setTempSettings({
@@ -440,7 +438,7 @@ export default function SettingsModal({
                     <p className="text-xs font-semibold text-slate-800">Two-Factor Authentication (2FA)</p>
                     <p className="text-[10px] text-slate-500">Require 2FA codes for all admin operations</p>
                   </div>
-                  <input 
+                  <input
                     type="checkbox"
                     checked={tempSettings.security.enable2FA}
                     onChange={e => setTempSettings({
@@ -461,15 +459,15 @@ export default function SettingsModal({
                 <p className="text-xs font-bold text-slate-700 mb-2">Add New Simulated User</p>
                 <form onSubmit={handleAddMockUser} className="flex flex-col gap-2.5">
                   <div className="grid grid-cols-2 gap-2">
-                    <input 
-                      type="text" 
+                    <input
+                      type="text"
                       placeholder="Full Name"
                       value={newUserName}
                       onChange={e => setNewUserName(e.target.value)}
                       className="px-2.5 py-1.5 border border-slate-200 rounded-lg text-xs outline-none bg-white focus:border-blue-500"
                     />
-                    <input 
-                      type="email" 
+                    <input
+                      type="email"
                       placeholder="Email Address"
                       value={newUserEmail}
                       onChange={e => setNewUserEmail(e.target.value)}
@@ -486,7 +484,7 @@ export default function SettingsModal({
                       <option>Manager</option>
                       <option>Employee</option>
                     </select>
-                    <button 
+                    <button
                       type="submit"
                       className="flex items-center gap-1 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-bold text-xs transition"
                     >
@@ -510,7 +508,7 @@ export default function SettingsModal({
                         <span className="px-2 py-0.5 rounded bg-blue-50 text-blue-700 text-[10px] font-bold">
                           {u.role}
                         </span>
-                        <button 
+                        <button
                           onClick={() => handleDeleteMockUser(u.id)}
                           className="p-1 text-slate-400 hover:text-rose-600 transition"
                         >
@@ -529,8 +527,8 @@ export default function SettingsModal({
             <>
               <div className="flex flex-col gap-1.5">
                 <label className="text-xs font-semibold text-slate-600">Purchase Order Auto-Approval Threshold ($)</label>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={tempSettings.workflow.poApprovalLimit}
                   onChange={e => setTempSettings({
                     ...tempSettings,
@@ -543,8 +541,8 @@ export default function SettingsModal({
 
               <div className="flex flex-col gap-1.5">
                 <label className="text-xs font-semibold text-slate-600">Expense Claim Auto-Approval Threshold ($)</label>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={tempSettings.workflow.expenseApprovalLimit}
                   onChange={e => setTempSettings({
                     ...tempSettings,
@@ -559,7 +557,7 @@ export default function SettingsModal({
                   <p className="text-xs font-semibold text-slate-800">Auto-Approve Project Creations</p>
                   <p className="text-[10px] text-slate-500">Allow team managers to initiate projects without Admin sign-off</p>
                 </div>
-                <input 
+                <input
                   type="checkbox"
                   checked={tempSettings.workflow.autoApproveProjects}
                   onChange={e => setTempSettings({
@@ -576,13 +574,13 @@ export default function SettingsModal({
           {activeModal === 'notifications' && (
             <div className="space-y-3">
               <p className="text-xs text-slate-500 mb-2">Enable or disable system notification delivery channels.</p>
-              
+
               <div className="flex items-center justify-between p-3 bg-slate-50 rounded-xl border border-slate-200/50">
                 <div>
                   <p className="text-xs font-semibold text-slate-800">Email Notifications</p>
                   <p className="text-[10px] text-slate-500">Send transactional summaries and billing updates</p>
                 </div>
-                <input 
+                <input
                   type="checkbox"
                   checked={tempSettings.notifications.emailAlerts}
                   onChange={e => setTempSettings({
@@ -598,7 +596,7 @@ export default function SettingsModal({
                   <p className="text-xs font-semibold text-slate-800">In-App Alerts & Badges</p>
                   <p className="text-[10px] text-slate-500">Show notification dot and toast alerts in-browser</p>
                 </div>
-                <input 
+                <input
                   type="checkbox"
                   checked={tempSettings.notifications.inAppAlerts}
                   onChange={e => setTempSettings({
@@ -614,7 +612,7 @@ export default function SettingsModal({
                   <p className="text-xs font-semibold text-slate-800">SMS Alerts</p>
                   <p className="text-[10px] text-slate-500">Deliver emergency security text updates to mobile</p>
                 </div>
-                <input 
+                <input
                   type="checkbox"
                   checked={tempSettings.notifications.smsAlerts}
                   onChange={e => setTempSettings({
@@ -630,7 +628,7 @@ export default function SettingsModal({
                   <p className="text-xs font-semibold text-slate-800">Monthly Analytical Digest</p>
                   <p className="text-[10px] text-slate-500">Send summary report of system operations every month</p>
                 </div>
-                <input 
+                <input
                   type="checkbox"
                   checked={tempSettings.notifications.monthlyDigest}
                   onChange={e => setTempSettings({
@@ -647,13 +645,13 @@ export default function SettingsModal({
 
         {/* Modal Footer */}
         <div className="px-6 py-4 bg-slate-50 border-t border-slate-100 flex items-center justify-end gap-3">
-          <button 
+          <button
             onClick={onClose}
             className="px-4 py-2 border border-slate-200 rounded-xl hover:bg-slate-100 text-xs font-bold text-slate-700 transition"
           >
             Cancel
           </button>
-          <button 
+          <button
             onClick={onApply}
             className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition shadow-sm"
           >
