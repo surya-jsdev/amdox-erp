@@ -91,12 +91,13 @@ export default function BusinessIntelligence() {
     const getFormattedDate = (date: Date) => {
         return date.toISOString().split('T')[0];
     };
-    const initialEndDate = new Date();
-    const initialStartDate = new Date();
-    initialStartDate.setFullYear(initialEndDate.getFullYear() - 1);
 
-    const [startDate, setStartDate] = useState(getFormattedDate(initialStartDate));
-    const [endDate, setEndDate] = useState(getFormattedDate(initialEndDate));
+    const currentYear = new Date().getFullYear();
+    const [startDate, setStartDate] = useState(`${currentYear}-01-01`);
+    const [endDate, setEndDate] = useState(`${currentYear}-12-31`);
+    const [yearFilter, setYearFilter] = useState<'This Year' | 'Last Year' | '2024'>('This Year');
+    const [yearDropdownOpen, setYearDropdownOpen] = useState(false);
+
     const [branch, setBranch] = useState('All Branches');
     const [department, setDepartment] = useState('All Departments');
     const [employee, setEmployee] = useState('All Employees');
@@ -132,13 +133,13 @@ export default function BusinessIntelligence() {
     }, []);
 
     // Load function
-    const fetchBIData = async (isInitial = false) => {
+    const fetchBIData = async (isInitial = false, overrideStartDate?: string, overrideEndDate?: string) => {
         setLoading(true);
         setError(null);
         try {
             const params = new URLSearchParams({
-                startDate,
-                endDate,
+                startDate: overrideStartDate !== undefined ? overrideStartDate : startDate,
+                endDate: overrideEndDate !== undefined ? overrideEndDate : endDate,
                 branch,
                 department,
                 employee,
@@ -181,14 +182,38 @@ export default function BusinessIntelligence() {
         }
     }, [groupBy]);
 
-    const handleApplyFilters = () => {
-        fetchBIData(false);
-        showToast('Filters applied successfully!', 'success');
+    const handleYearFilterChange = (option: 'This Year' | 'Last Year' | '2024') => {
+        setYearFilter(option);
+        
+        let newStart = '';
+        let newEnd = '';
+        
+        const currentYr = new Date().getFullYear();
+        
+        if (option === 'This Year') {
+            newStart = `${currentYr}-01-01`;
+            newEnd = `${currentYr}-12-31`;
+        } else if (option === 'Last Year') {
+            newStart = `${currentYr - 1}-01-01`;
+            newEnd = `${currentYr - 1}-12-31`;
+        } else if (option === '2024') {
+            newStart = '2024-01-01';
+            newEnd = '2024-12-31';
+        }
+        
+        setStartDate(newStart);
+        setEndDate(newEnd);
+        fetchBIData(false, newStart, newEnd);
     };
 
     const handleResetFilters = () => {
-        setStartDate('2024-05-01');
-        setEndDate('2024-05-31');
+        const currentYr = new Date().getFullYear();
+        const defaultStart = `${currentYr}-01-01`;
+        const defaultEnd = `${currentYr}-12-31`;
+        
+        setStartDate(defaultStart);
+        setEndDate(defaultEnd);
+        setYearFilter('This Year');
         setBranch('All Branches');
         setDepartment('All Departments');
         setEmployee('All Employees');
@@ -198,6 +223,13 @@ export default function BusinessIntelligence() {
         setStatus('All Status');
         setGroupBy('Monthly');
         showToast('Filters reset to default', 'info');
+        
+        fetchBIData(false, defaultStart, defaultEnd);
+    };
+
+    const handleApplyFilters = () => {
+        fetchBIData(false);
+        showToast('Filters applied successfully', 'success');
     };
 
     // Show temporary banner / notification toast
@@ -570,10 +602,40 @@ export default function BusinessIntelligence() {
                                                 Revenue by {groupBy === 'Daily' ? 'Day' : groupBy === 'Weekly' ? 'Week' : 'Month'}
                                             </h3>
                                         </div>
-                                        <div className="flex items-center gap-1.5 px-3 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs font-semibold text-slate-600 cursor-pointer">
-                                            <span>This Year</span>
-                                            <ChevronDown size={14} />
-                                        </div>
+                                         <div className="relative">
+                                             <button
+                                                 onClick={() => setYearDropdownOpen(!yearDropdownOpen)}
+                                                 className="flex items-center gap-1.5 px-3 py-1 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-lg text-xs font-semibold text-slate-600 cursor-pointer transition-colors duration-150"
+                                             >
+                                                 <span>{yearFilter}</span>
+                                                 <ChevronDown size={14} className={`transform transition-transform duration-200 ${yearDropdownOpen ? 'rotate-180' : ''}`} />
+                                             </button>
+
+                                             {yearDropdownOpen && (
+                                                 <>
+                                                     <div
+                                                         className="fixed inset-0 z-30"
+                                                         onClick={() => setYearDropdownOpen(false)}
+                                                     />
+                                                     <div className="absolute right-0 mt-1.5 w-28 bg-white border border-slate-200 rounded-lg shadow-lg py-1 z-40 animate-in fade-in slide-in-from-top-1 duration-150">
+                                                         {(['This Year', 'Last Year', '2024'] as const).map((option) => (
+                                                             <button
+                                                                 key={option}
+                                                                 onClick={() => {
+                                                                     handleYearFilterChange(option);
+                                                                     setYearDropdownOpen(false);
+                                                                 }}
+                                                                 className={`w-full text-left px-3 py-1.5 text-xs font-medium transition-colors duration-150 hover:bg-slate-50
+                                                                     ${yearFilter === option ? 'text-blue-600 bg-blue-50/50' : 'text-slate-600'}
+                                                                 `}
+                                                             >
+                                                                 {option}
+                                                             </button>
+                                                         ))}
+                                                     </div>
+                                                 </>
+                                             )}
+                                         </div>
                                     </div>
 
                                     <div className="h-72 w-full mt-2">
