@@ -711,7 +711,7 @@ export default function AiForecasting() {
                                             margin={{ top: 10, right: 10, left: -10, bottom: 0 }}
                                         >
                                             <defs>
-                                             
+
                                                 <linearGradient id="uncertaintyEnvelope" x1="0" y1="0" x2="0" y2="1">
                                                     <stop offset="5%" stopColor="#6366f1" stopOpacity={0.12} />
                                                     <stop offset="95%" stopColor="#6366f1" stopOpacity={0.01} />
@@ -1017,7 +1017,7 @@ export default function AiForecasting() {
                                                     {p.changePercentage >= 0 ? `+${p.changePercentage}%` : `${p.changePercentage}%`}
                                                 </span>
                                             </div>
-                                            
+
                                             <div className="flex justify-between items-center text-xs font-bold text-slate-600 border-t border-slate-100 pt-2.5">
                                                 <div>
                                                     <p className="text-slate-400 text-[9px] uppercase tracking-wider">Actual (30d)</p>
@@ -1115,13 +1115,13 @@ export default function AiForecasting() {
                                                     {p.riskType}
                                                 </span>
                                             </div>
-                                            
+
                                             <div className="flex justify-between items-center border-t border-slate-100 pt-2.5">
                                                 <div className="text-xs font-bold">
                                                     <span className="text-slate-400 text-[9px] uppercase tracking-wider block">Days to Risk</span>
                                                     <span className="text-slate-900 font-extrabold text-sm">{p.daysToRisk} Days</span>
                                                 </div>
-                                                
+
                                                 <button
                                                     onClick={() => showToast(`Initiated purchase order process for ${p.product}`, 'success')}
                                                     className="flex items-center gap-1 py-1.5 px-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-[10px] font-bold transition cursor-pointer"

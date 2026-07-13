@@ -47,7 +47,6 @@ Amdox ERP System is a modern Enterprise Resource Planning (ERP) web application 
 - Product Management
 - Categories
 - Stock Management
-- Warehouses
 - Stock Movement
 
 ---
@@ -107,6 +106,8 @@ Amdox ERP System is a modern Enterprise Resource Planning (ERP) web application 
 
 
 ## Development Tools
+- Frontend - vercel
+-Backend - Render
 - Git
 - GitHub
 - VS Code
@@ -194,39 +195,19 @@ nodemon server.js
 
 ```bash
 npm run dev
-```
+---
 
 ---
 
-# 📸 Screenshots
+# Future Enhancements
 
-Add screenshots of:
-
-- Login Page
-- Dashboard
-- Employee Module
-- Finance Module
-- Inventory Module
-- Purchase Module
-- Sales Module
-- Reports
-- Profile Page
-
----
-
-# 🚀 Future Enhancements
-
-- AI-powered Dashboard
 - Email Notifications
 - SMS Notifications
 - Multi-Company Support
-- Multi-Currency
 - GST & Tax Management
 - Barcode Scanner
 - QR Code Support
 - Mobile App
-- Dark Mode
-- Export PDF & Excel
 - Audit Logs
 
 ---
@@ -254,9 +235,12 @@ Add screenshots of:
 
 # 👨‍💻 Developed By
 
-**Surya**
+**Surya (Full Stack Developer(MERN)) **
+**Roshni**
+**Shivani Shibu**
+**Teju**
 
-Full Stack MERN Developer
+Live Demo:http://localhost:5173/Dashboard
 
 GitHub: https://github.com/surya-jsdev
 
